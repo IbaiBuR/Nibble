@@ -1,0 +1,267 @@
+#include "bitboard.h"
+
+#include <inttypes.h>
+#include <stdio.h>
+
+#include "types.h"
+
+Bitboard pawnAttacks[COLOR_NB][SQUARE_NB];
+Bitboard knightAttacks[SQUARE_NB];
+Bitboard kingAttacks[SQUARE_NB];
+Bitboard bishopMasks[SQUARE_NB];
+Bitboard rookMasks[SQUARE_NB];
+Bitboard bishopAttacks[SQUARE_NB][512];
+Bitboard rookAttacks[SQUARE_NB][4096];
+
+Bitboard genPawnAttacks(Square sq, Color c) {
+    Bitboard bb      = 0ULL;
+    Bitboard attacks = 0ULL;
+
+    setBit(bb, sq);
+
+    switch (c)
+    {
+    case WHITE:
+        attacks |= shiftNW(bb);
+        attacks |= shiftNE(bb);
+        break;
+    case BLACK:
+        attacks |= shiftSW(bb);
+        attacks |= shiftSE(bb);
+        break;
+    }
+
+    return attacks;
+}
+
+Bitboard genKnightAttacks(Square sq) {
+    Bitboard bb      = 0ULL;
+    Bitboard attacks = 0ULL;
+
+    setBit(bb, sq);
+
+    // white's knight attacks
+    if ((bb >> 17) & NOT_H_FILE)
+        attacks |= (bb >> 17);
+    if ((bb >> 15) & NOT_A_FILE)
+        attacks |= (bb >> 15);
+    if ((bb >> 10) & NOT_HG_FILE)
+        attacks |= (bb >> 10);
+    if ((bb >> 6) & NOT_AB_FILE)
+        attacks |= (bb >> 6);
+
+    // black's knight attacks
+    if ((bb << 17) & NOT_A_FILE)
+        attacks |= (bb << 17);
+    if ((bb << 15) & NOT_H_FILE)
+        attacks |= (bb << 15);
+    if ((bb << 10) & NOT_AB_FILE)
+        attacks |= (bb << 10);
+    if ((bb << 6) & NOT_HG_FILE)
+        attacks |= (bb << 6);
+
+    return attacks;
+}
+
+Bitboard genKingAttacks(Square sq) {
+    Bitboard bb      = 0ULL;
+    Bitboard attacks = 0ULL;
+
+    setBit(bb, sq);
+
+    // king can move 1 square in all directions
+    attacks |= shiftN(bb);
+    attacks |= shiftS(bb);
+    attacks |= shiftE(bb);
+    attacks |= shiftW(bb);
+    attacks |= shiftNE(bb);
+    attacks |= shiftNW(bb);
+    attacks |= shiftSE(bb);
+    attacks |= shiftSW(bb);
+
+    return attacks;
+}
+
+Bitboard genBishopMasks(Square sq) {
+    Bitboard attacks = 0ULL;
+    Rank     initialRank;
+    File     initialFile;
+
+    Rank targetRank = rankOf(sq);
+    File targetFile = fileOf(sq);
+
+    for (initialRank = targetRank + 1, initialFile = targetFile + 1;
+         initialRank <= 6 && initialFile <= 6; initialRank++, initialFile++)
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+    for (initialRank = targetRank + 1, initialFile = targetFile - 1;
+         initialRank <= 6 && initialFile >= 1; initialRank++, initialFile--)
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+    for (initialRank = targetRank - 1, initialFile = targetFile + 1;
+         initialRank >= 1 && initialFile <= 6; initialRank--, initialFile++)
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+    for (initialRank = targetRank - 1, initialFile = targetFile - 1;
+         initialRank >= 1 && initialFile >= 1; initialRank--, initialFile--)
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+
+    return attacks;
+}
+
+Bitboard genRookMasks(Square sq) {
+    Bitboard attacks = 0ULL;
+    Rank     initialRank;
+    File     initialFile;
+
+    Rank targetRank = rankOf(sq);
+    File targetFile = fileOf(sq);
+
+    for (initialRank = targetRank + 1; initialRank <= 6; initialRank++)
+        attacks |= (bitOf(squareOf(targetFile, initialRank)));
+    for (initialRank = targetRank - 1; initialRank >= 1; initialRank--)
+        attacks |= (bitOf(squareOf(targetFile, initialRank)));
+    for (initialFile = targetFile + 1; initialFile <= 6; initialFile++)
+        attacks |= (bitOf(squareOf(initialFile, targetRank)));
+    for (initialFile = targetFile - 1; initialFile >= 1; initialFile--)
+        attacks |= (bitOf(squareOf(initialFile, targetRank)));
+
+    return attacks;
+}
+
+Bitboard genBishopAttacks(Square sq, Bitboard blockers) {
+    Bitboard attacks = 0ULL;
+    Rank     initialRank;
+    File     initialFile;
+
+    Rank targetRank = rankOf(sq);
+    File targetFile = fileOf(sq);
+
+    for (initialRank = targetRank + 1, initialFile = targetFile + 1;
+         initialRank <= 7 && initialFile <= 7; initialRank++, initialFile++)
+    {
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+        if ((bitOf(squareOf(initialFile, initialRank))) & blockers)
+            break;
+    }
+    for (initialRank = targetRank + 1, initialFile = targetFile - 1;
+         initialRank <= 7 && initialFile >= 0; initialRank++, initialFile--)
+    {
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+        if ((bitOf(squareOf(initialFile, initialRank))) & blockers)
+            break;
+    }
+    for (initialRank = targetRank - 1, initialFile = targetFile + 1;
+         initialRank >= 0 && initialFile <= 7; initialRank--, initialFile++)
+    {
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+        if ((bitOf(squareOf(initialFile, initialRank))) & blockers)
+            break;
+    }
+    for (initialRank = targetRank - 1, initialFile = targetFile - 1;
+         initialRank >= 0 && initialFile >= 0; initialRank--, initialFile--)
+    {
+        attacks |= (bitOf(squareOf(initialFile, initialRank)));
+        if ((bitOf(squareOf(initialFile, initialRank))) & blockers)
+            break;
+    }
+
+    return attacks;
+}
+
+Bitboard genRookAttacks(Square sq, Bitboard blockers) {
+    Bitboard attacks = 0ULL;
+    Rank     initialRank;
+    File     initialFile;
+
+    Rank targetRank = rankOf(sq);
+    File targetFile = fileOf(sq);
+
+    for (initialRank = targetRank + 1; initialRank <= 7; initialRank++)
+    {
+        attacks |= (bitOf(squareOf(targetFile, initialRank)));
+        if ((bitOf(squareOf(targetFile, initialRank))) & blockers)
+            break;
+    }
+    for (initialRank = targetRank - 1; initialRank >= 0; initialRank--)
+    {
+        attacks |= (bitOf(squareOf(targetFile, initialRank)));
+        if ((bitOf(squareOf(targetFile, initialRank))) & blockers)
+            break;
+    }
+    for (initialFile = targetFile + 1; initialFile <= 7; initialFile++)
+    {
+        attacks |= (bitOf(squareOf(initialFile, targetRank)));
+        if ((bitOf(squareOf(initialFile, targetRank))) & blockers)
+            break;
+    }
+    for (initialFile = targetFile - 1; initialFile >= 0; initialFile--)
+    {
+        attacks |= (bitOf(squareOf(initialFile, targetRank)));
+        if ((bitOf(squareOf(initialFile, targetRank))) & blockers)
+            break;
+    }
+
+    return attacks;
+}
+
+Bitboard setOccupancies(int index, int nBits, Bitboard attacks) {
+    Bitboard occupancies = 0ULL;
+
+    for (int count = 0; count < nBits; count++)
+    {
+        Square sq = lsbIndex(attacks);
+        resetBit(attacks, sq);
+
+        if (index & (1 << count))
+            occupancies |= (1ULL << sq);
+    }
+
+    return occupancies;
+}
+
+// returns all attacks to a given square
+inline Bitboard attacksToSq(Board *board, Square sq, Bitboard occupancy) {
+    Bitboard knights, kings, bishopsQueens, rooksQueens;
+
+    knights     = board->pieceBB[W_KNIGHT] | board->pieceBB[B_KNIGHT];
+    kings       = board->pieceBB[W_KING] | board->pieceBB[B_KING];
+    rooksQueens = bishopsQueens =
+        board->pieceBB[W_QUEEN] | board->pieceBB[B_QUEEN];
+    rooksQueens |= board->pieceBB[W_ROOK] | board->pieceBB[B_ROOK];
+    bishopsQueens |= board->pieceBB[W_BISHOP] | board->pieceBB[B_BISHOP];
+
+    return (pawnAttacks[WHITE][sq] & board->pieceBB[B_PAWN])
+         | (pawnAttacks[BLACK][sq] & board->pieceBB[W_PAWN])
+         | (knightAttacks[sq] & knights) | (kingAttacks[sq] & kings)
+         | (getBishopAttacks(sq, occupancy) & bishopsQueens)
+         | (getRookAttacks(sq, occupancy) & rooksQueens);
+}
+
+inline void initBB() {
+    for (Square sq = A8; sq < SQUARE_NB; sq++)
+    {
+        pawnAttacks[WHITE][sq] = genPawnAttacks(sq, WHITE);
+        pawnAttacks[BLACK][sq] = genPawnAttacks(sq, BLACK);
+        knightAttacks[sq]      = genKnightAttacks(sq);
+        kingAttacks[sq]        = genKingAttacks(sq);
+        bishopMasks[sq]        = genBishopMasks(sq);
+        rookMasks[sq]          = genRookMasks(sq);
+    }
+
+    initSlidersAttacks(BISHOP);
+    initSlidersAttacks(ROOK);
+}
+
+inline void printBB(Bitboard bitboard) {
+    printf("\n");
+    for (Rank rank = RANK_1; rank < RANK_NB; rank++)
+    {
+        for (File file = A_FILE; file < FILE_NB; file++)
+        {
+            if (!file)
+                printf("  %d ", 8 - rank);
+            printf(" %d", getBit(bitboard, squareOf(file, rank)) ? 1 : 0);
+        }
+        printf("\n");
+    }
+    printf("\n     a b c d e f g h\n\n");
+    printf("     Bitboard: 0x%" PRIX64 "ULL\n\n", bitboard);
+}
