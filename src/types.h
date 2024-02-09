@@ -1,6 +1,8 @@
 #pragma once
 
-#include <stdint.h>
+#include <inttypes.h>
+
+#define MAX_MOVES 256
 
 #define Inline static inline __attribute__((always_inline))
 
@@ -114,3 +116,8 @@ typedef struct ScoredMove {
     Move  move;
     Score score;
 } ScoredMove;
+
+typedef struct MoveList {
+    uint32_t count;
+    Move     moves[MAX_MOVES];
+} MoveList;
