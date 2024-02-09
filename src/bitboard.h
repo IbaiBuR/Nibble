@@ -8,6 +8,15 @@
 #define NOT_AB_FILE 0xFCFCFCFCFCFCFCFCULL
 #define NOT_HG_FILE 0x3F3F3F3F3F3F3F3FULL
 
+#define rank1 0xFF00000000000000ULL
+#define rank2 0x00FF000000000000ULL
+#define rank3 0x0000FF0000000000ULL
+#define rank4 0x000000FF00000000ULL
+#define rank5 0x00000000FF000000ULL
+#define rank6 0x0000000000FF0000ULL
+#define rank7 0x000000000000FF00ULL
+#define rank8 0x00000000000000FFULL
+
 #define getBit(bitboard, square)   (bitboard & bitOf(square))
 #define setBit(bitboard, square)   (bitboard |= bitOf(square))
 #define resetBit(bitboard, square) (bitboard ^= bitOf(square) & bitboard)
