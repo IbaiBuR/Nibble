@@ -12,7 +12,7 @@ inline Bitboard doublePawnPush(Bitboard pawns, Bitboard empty, Color c) {
              : shiftS(singlePawnPush(pawns, empty, BLACK)) & empty & rank5;
 }
 
-Inline void addMove(Move move, MoveList *moveList) {
+INLINE void addMove(Move move, MoveList *moveList) {
     moveList->moves[moveList->count] = move;
     moveList->count++;
 }

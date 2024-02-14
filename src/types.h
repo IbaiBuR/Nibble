@@ -4,7 +4,7 @@
 
 #define MAX_MOVES 256
 
-#define Inline static inline __attribute__((always_inline))
+#define INLINE static inline __attribute__((always_inline))
 
 #define squareOf(file, rank) ((rank << 3) + file)
 #define fileOf(square)       (square & 7)

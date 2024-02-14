@@ -50,15 +50,15 @@ static const int rookRelevantOccBits[64] = {
 };
 // clang-format on
 
-Inline Bitboard bitOf(Square sq) { return 1ULL << sq; }
-Inline Bitboard shiftN(Bitboard bb) { return bb >> 8; }
-Inline Bitboard shiftS(Bitboard bb) { return bb << 8; }
-Inline Bitboard shiftW(Bitboard bb) { return bb >> 1; }
-Inline Bitboard shiftE(Bitboard bb) { return bb << 1; }
-Inline Bitboard shiftNW(Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
-Inline Bitboard shiftNE(Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
-Inline Bitboard shiftSW(Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
-Inline Bitboard shiftSE(Bitboard bb) { return (bb << 9) & NOT_A_FILE; }
+INLINE Bitboard bitOf(Square sq) { return 1ULL << sq; }
+INLINE Bitboard shiftN(Bitboard bb) { return bb >> 8; }
+INLINE Bitboard shiftS(Bitboard bb) { return bb << 8; }
+INLINE Bitboard shiftW(Bitboard bb) { return bb >> 1; }
+INLINE Bitboard shiftE(Bitboard bb) { return bb << 1; }
+INLINE Bitboard shiftNW(Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
+INLINE Bitboard shiftNE(Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
+INLINE Bitboard shiftSW(Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
+INLINE Bitboard shiftSE(Bitboard bb) { return (bb << 9) & NOT_A_FILE; }
 
 extern Bitboard pawnAttacks[COLOR_NB][SQUARE_NB];
 extern Bitboard knightAttacks[SQUARE_NB];
@@ -78,7 +78,7 @@ Bitboard genRookAttacks(Square square, Bitboard blockers);
 Bitboard setOccupancies(int index, int nBits, Bitboard attacks);
 Bitboard attacksToSq(Board *board, Square square, Bitboard occupancy);
 
-Inline Bitboard getBishopAttacks(Square square, Bitboard occupancy) {
+INLINE Bitboard getBishopAttacks(Square square, Bitboard occupancy) {
     occupancy &= bishopMasks[square];
     occupancy *= bishopMagics[square];
     occupancy >>= 64 - bishopRelevantOccBits[square];
@@ -86,7 +86,7 @@ Inline Bitboard getBishopAttacks(Square square, Bitboard occupancy) {
     return bishopAttacks[square][occupancy];
 }
 
-Inline Bitboard getRookAttacks(Square square, Bitboard occupancy) {
+INLINE Bitboard getRookAttacks(Square square, Bitboard occupancy) {
     occupancy &= rookMasks[square];
     occupancy *= rookMagics[square];
     occupancy >>= 64 - rookRelevantOccBits[square];
