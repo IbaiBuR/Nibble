@@ -2,6 +2,7 @@
 
 static uint32_t seed = 1804289383;
 
+// XORShift algorithm
 uint32_t randU32() {
     uint32_t num = seed;
 
