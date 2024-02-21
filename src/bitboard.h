@@ -50,15 +50,15 @@ static const int rookRelevantOccBits[64] = {
 };
 // clang-format on
 
-INLINE Bitboard bitOf(Square sq) { return 1ULL << sq; }
-INLINE Bitboard shiftN(Bitboard bb) { return bb >> 8; }
-INLINE Bitboard shiftS(Bitboard bb) { return bb << 8; }
-INLINE Bitboard shiftW(Bitboard bb) { return bb >> 1; }
-INLINE Bitboard shiftE(Bitboard bb) { return bb << 1; }
-INLINE Bitboard shiftNW(Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
-INLINE Bitboard shiftNE(Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
-INLINE Bitboard shiftSW(Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
-INLINE Bitboard shiftSE(Bitboard bb) { return (bb << 9) & NOT_A_FILE; }
+Bitboard bitOf(Square sq) { return 1ULL << sq; }
+Bitboard shiftN(Bitboard bb) { return bb >> 8; }
+Bitboard shiftS(Bitboard bb) { return bb << 8; }
+Bitboard shiftW(Bitboard bb) { return bb >> 1; }
+Bitboard shiftE(Bitboard bb) { return bb << 1; }
+Bitboard shiftNW(Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
+Bitboard shiftNE(Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
+Bitboard shiftSW(Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
+Bitboard shiftSE(Bitboard bb) { return (bb << 9) & NOT_A_FILE; }
 
 extern Bitboard pawnAttacks[COLOR_NB][SQUARE_NB];
 extern Bitboard knightAttacks[SQUARE_NB];
