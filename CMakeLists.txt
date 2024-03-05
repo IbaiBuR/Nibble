@@ -9,8 +9,6 @@ add_executable(Nibble src/nibble.c
         src/bitboard.c
         src/util.h
         src/util.c
-        src/magics.h
-        src/magics.c
         src/board.c
         src/board.h
         src/movegen.c
