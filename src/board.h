@@ -15,9 +15,9 @@ static const char *squareToCoordinates[SQUARE_NB] = {
     "h2", "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
 };
 
-static const char pieceToChar[PIECE_NB] = "PNBRQKpnbrqk";
+static constexpr char pieceToChar[PIECE_NB] = "PNBRQKpnbrqk";
 
-static const int charToPiece[] = {
+static constexpr int charToPiece[] = {
     ['P'] = W_PAWN,   ['N'] = W_KNIGHT, ['B'] = W_BISHOP, ['R'] = W_ROOK,
     ['Q'] = W_QUEEN,  ['K'] = W_KING,   ['p'] = B_PAWN,   ['n'] = B_KNIGHT,
     ['b'] = B_BISHOP, ['r'] = B_ROOK,   ['q'] = B_QUEEN,  ['k'] = B_KING};
