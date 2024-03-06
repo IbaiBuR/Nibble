@@ -13,7 +13,7 @@ Bitboard rookMasks[SQUARE_NB];
 Bitboard bishopAttacks[SQUARE_NB][512];
 Bitboard rookAttacks[SQUARE_NB][4096];
 
-Bitboard genPawnAttacks(Square sq, Color c) {
+Bitboard genPawnAttacks(const Square sq, const Color c) {
     Bitboard bb      = 0ULL;
     Bitboard attacks = 0ULL;
 
@@ -34,7 +34,7 @@ Bitboard genPawnAttacks(Square sq, Color c) {
     return attacks;
 }
 
-Bitboard genKnightAttacks(Square sq) {
+Bitboard genKnightAttacks(const Square sq) {
     Bitboard bb      = 0ULL;
     Bitboard attacks = 0ULL;
 
@@ -63,7 +63,7 @@ Bitboard genKnightAttacks(Square sq) {
     return attacks;
 }
 
-Bitboard genKingAttacks(Square sq) {
+Bitboard genKingAttacks(const Square sq) {
     Bitboard bb      = 0ULL;
     Bitboard attacks = 0ULL;
 
@@ -82,13 +82,13 @@ Bitboard genKingAttacks(Square sq) {
     return attacks;
 }
 
-Bitboard genBishopMasks(Square sq) {
+Bitboard genBishopMasks(const Square sq) {
     Bitboard attacks = 0ULL;
     Rank     initialRank;
     File     initialFile;
 
-    Rank targetRank = rankOf(sq);
-    File targetFile = fileOf(sq);
+    const Rank targetRank = rankOf(sq);
+    const File targetFile = fileOf(sq);
 
     for (initialRank = targetRank + 1, initialFile = targetFile + 1;
          initialRank <= 6 && initialFile <= 6; initialRank++, initialFile++)
@@ -106,13 +106,13 @@ Bitboard genBishopMasks(Square sq) {
     return attacks;
 }
 
-Bitboard genRookMasks(Square sq) {
+Bitboard genRookMasks(const Square sq) {
     Bitboard attacks = 0ULL;
     Rank     initialRank;
     File     initialFile;
 
-    Rank targetRank = rankOf(sq);
-    File targetFile = fileOf(sq);
+    const Rank targetRank = rankOf(sq);
+    const File targetFile = fileOf(sq);
 
     for (initialRank = targetRank + 1; initialRank <= 6; initialRank++)
         attacks |= (bitOf(squareOf(targetFile, initialRank)));
@@ -126,13 +126,13 @@ Bitboard genRookMasks(Square sq) {
     return attacks;
 }
 
-Bitboard genBishopAttacks(Square sq, Bitboard blockers) {
+Bitboard genBishopAttacks(const Square sq, const Bitboard blockers) {
     Bitboard attacks = 0ULL;
     Rank     initialRank;
     File     initialFile;
 
-    Rank targetRank = rankOf(sq);
-    File targetFile = fileOf(sq);
+    const Rank targetRank = rankOf(sq);
+    const File targetFile = fileOf(sq);
 
     for (initialRank = targetRank + 1, initialFile = targetFile + 1;
          initialRank <= 7 && initialFile <= 7; initialRank++, initialFile++)
@@ -166,13 +166,13 @@ Bitboard genBishopAttacks(Square sq, Bitboard blockers) {
     return attacks;
 }
 
-Bitboard genRookAttacks(Square sq, Bitboard blockers) {
+Bitboard genRookAttacks(const Square sq, const Bitboard blockers) {
     Bitboard attacks = 0ULL;
     Rank     initialRank;
     File     initialFile;
 
-    Rank targetRank = rankOf(sq);
-    File targetFile = fileOf(sq);
+    const Rank targetRank = rankOf(sq);
+    const File targetFile = fileOf(sq);
 
     for (initialRank = targetRank + 1; initialRank <= 7; initialRank++)
     {
@@ -202,12 +202,12 @@ Bitboard genRookAttacks(Square sq, Bitboard blockers) {
     return attacks;
 }
 
-Bitboard setOccupancies(int index, int nBits, Bitboard attacks) {
+Bitboard setOccupancies(const int index, const int nBits, Bitboard attacks) {
     Bitboard occupancies = 0ULL;
 
     for (int count = 0; count < nBits; count++)
     {
-        Square sq = lsbIndex(attacks);
+        const Square sq = lsbIndex(attacks);
         resetBit(attacks, sq);
 
         if (index & (1 << count))
@@ -218,12 +218,14 @@ Bitboard setOccupancies(int index, int nBits, Bitboard attacks) {
 }
 
 // returns all attacks to a given square
-inline Bitboard attacksToSq(Board *board, Square sq, Bitboard occupancy) {
-    Bitboard knights, kings, bishopsQueens, rooksQueens;
+inline Bitboard
+attacksToSq(const Board *board, const Square sq, const Bitboard occupancy) {
+    Bitboard bishopsQueens;
 
-    knights     = board->pieceBB[W_KNIGHT] | board->pieceBB[B_KNIGHT];
-    kings       = board->pieceBB[W_KING] | board->pieceBB[B_KING];
-    rooksQueens = bishopsQueens =
+    const Bitboard knights =
+        board->pieceBB[W_KNIGHT] | board->pieceBB[B_KNIGHT];
+    const Bitboard kings = board->pieceBB[W_KING] | board->pieceBB[B_KING];
+    Bitboard       rooksQueens = bishopsQueens =
         board->pieceBB[W_QUEEN] | board->pieceBB[B_QUEEN];
     rooksQueens |= board->pieceBB[W_ROOK] | board->pieceBB[B_ROOK];
     bishopsQueens |= board->pieceBB[W_BISHOP] | board->pieceBB[B_BISHOP];
@@ -250,7 +252,7 @@ inline void initBB() {
     initSlidersAttacks(ROOK);
 }
 
-inline void printBB(Bitboard bitboard) {
+inline void printBB(const Bitboard bitboard) {
     printf("\n");
     for (Rank rank = RANK_1; rank < RANK_NB; rank++)
     {
@@ -266,27 +268,28 @@ inline void printBB(Bitboard bitboard) {
     printf("     Bitboard: 0x%" PRIX64 "ULL\n\n", bitboard);
 }
 
-inline void initSlidersAttacks(PieceType pt) {
+inline void initSlidersAttacks(const PieceType pt) {
     for (Square sq = A8; sq < SQUARE_NB; sq++)
     {
-        Bitboard attackMask = pt == BISHOP ? bishopMasks[sq] : rookMasks[sq];
-        int      nBits      = bitCount(attackMask);
-        int      occupancyIndex = (1 << nBits);
+        const Bitboard attackMask =
+            pt == BISHOP ? bishopMasks[sq] : rookMasks[sq];
+        const int nBits          = bitCount(attackMask);
+        const int occupancyIndex = (1 << nBits);
 
         for (int i = 0; i < occupancyIndex; i++)
         {
             if (pt == BISHOP)
             {
-                Bitboard occupancy  = setOccupancies(i, nBits, attackMask);
-                int      magicIndex = (occupancy * bishopMagics[sq])
-                              >> (64 - bishopRelevantOccBits[sq]);
+                const Bitboard occupancy = setOccupancies(i, nBits, attackMask);
+                const int      magicIndex = (occupancy * bishopMagics[sq])
+                                    >> (64 - bishopRelevantOccBits[sq]);
                 bishopAttacks[sq][magicIndex] = genBishopAttacks(sq, occupancy);
             }
             else
             {
-                Bitboard occupancy  = setOccupancies(i, nBits, attackMask);
-                int      magicIndex = (occupancy * rookMagics[sq])
-                              >> (64 - rookRelevantOccBits[sq]);
+                const Bitboard occupancy = setOccupancies(i, nBits, attackMask);
+                const int      magicIndex = (occupancy * rookMagics[sq])
+                                    >> (64 - rookRelevantOccBits[sq]);
                 rookAttacks[sq][magicIndex] = genRookAttacks(sq, occupancy);
             }
         }

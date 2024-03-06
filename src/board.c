@@ -16,7 +16,7 @@ void initializeBoard(Board *board) {
     board->fullMoveNumber = 1;
 }
 
-void printBoard(Board board) {
+void printBoard(const Board board) {
     printf("\n +---+---+---+---+---+---+---+---+\n");
 
     for (Rank rank = RANK_1; rank < RANK_NB; rank++)
@@ -51,18 +51,18 @@ void printBoard(Board board) {
     printf(" Move number    : %d\n\n", board.fullMoveNumber);
 }
 
-void parseFen(char *fen, Board *board) {
+void parseFen(const char *fen, Board *board) {
     initializeBoard(board);
 
     for (Rank rank = RANK_1; rank < RANK_NB; rank++)
     {
         for (File file = A_FILE; file < FILE_NB; file++)
         {
-            Square sq = squareOf(file, rank);
+            const Square sq = squareOf(file, rank);
 
             if ((*fen >= 'a' && *fen <= 'z') || (*fen >= 'A' && *fen <= 'Z'))
             {
-                Piece currentPiece = charToPiece[(int)*fen];
+                const Piece currentPiece = charToPiece[(int)*fen];
                 setBit(board->pieceBB[currentPiece], sq);
                 fen++;
             }
@@ -130,8 +130,7 @@ void parseFen(char *fen, Board *board) {
 
 // returns whether a square is attacked by a side
 // useful to check if king is in check
-inline bool
-attackedBySide(Board *board, Square sq, Bitboard occupancy, Color c) {
+inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
     if (pawnAttacks[c ^ 1][sq]
         & ((c == WHITE) ? board->pieceBB[B_PAWN] : board->pieceBB[W_PAWN]))
         return true;

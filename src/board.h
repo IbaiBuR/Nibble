@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdbool.h>
-
 #include "types.h"
 
 #define startPosFen "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
@@ -24,9 +22,6 @@ static constexpr int charToPiece[] = {
 
 void initializeBoard(Board *board);
 void printBoard(Board board);
-void parseFen(char *fen, Board *board);
+void parseFen(const char *fen, Board *board);
 
-bool attackedBySide(Board   *board,
-                    Square   square,
-                    Bitboard occupancy,
-                    Color    color);
+bool attackedBySide(const Board *board, Square square, Color color);

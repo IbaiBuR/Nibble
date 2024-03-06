@@ -99,15 +99,15 @@ static constexpr uint64_t bishopMagics[64] = {
     0x28000010020204ULL,   0x6000020202D0240ULL,  0x8918844842082200ULL,
     0x4010011029020020ULL};
 
-static Bitboard bitOf(Square sq) { return 1ULL << sq; }
-static Bitboard shiftN(Bitboard bb) { return bb >> 8; }
-static Bitboard shiftS(Bitboard bb) { return bb << 8; }
-static Bitboard shiftW(Bitboard bb) { return bb >> 1; }
-static Bitboard shiftE(Bitboard bb) { return bb << 1; }
-static Bitboard shiftNW(Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
-static Bitboard shiftNE(Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
-static Bitboard shiftSW(Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
-static Bitboard shiftSE(Bitboard bb) { return (bb << 9) & NOT_A_FILE; }
+static Bitboard bitOf(const Square sq) { return 1ULL << sq; }
+static Bitboard shiftN(const Bitboard bb) { return bb >> 8; }
+static Bitboard shiftS(const Bitboard bb) { return bb << 8; }
+static Bitboard shiftW(const Bitboard bb) { return bb >> 1; }
+static Bitboard shiftE(const Bitboard bb) { return bb << 1; }
+static Bitboard shiftNW(const Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
+static Bitboard shiftNE(const Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
+static Bitboard shiftSW(const Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
+static Bitboard shiftSE(const Bitboard bb) { return (bb << 9) & NOT_A_FILE; }
 
 extern Bitboard pawnAttacks[COLOR_NB][SQUARE_NB];
 extern Bitboard knightAttacks[SQUARE_NB];
@@ -125,9 +125,9 @@ Bitboard genRookMasks(Square square);
 Bitboard genBishopAttacks(Square square, Bitboard blockers);
 Bitboard genRookAttacks(Square square, Bitboard blockers);
 Bitboard setOccupancies(int index, int nBits, Bitboard attacks);
-Bitboard attacksToSq(Board *board, Square square, Bitboard occupancy);
+Bitboard attacksToSq(const Board *board, Square square, Bitboard occupancy);
 
-INLINE Bitboard getBishopAttacks(Square square, Bitboard occupancy) {
+INLINE Bitboard getBishopAttacks(const Square square, Bitboard occupancy) {
     occupancy &= bishopMasks[square];
     occupancy *= bishopMagics[square];
     occupancy >>= 64 - bishopRelevantOccBits[square];
@@ -135,7 +135,7 @@ INLINE Bitboard getBishopAttacks(Square square, Bitboard occupancy) {
     return bishopAttacks[square][occupancy];
 }
 
-INLINE Bitboard getRookAttacks(Square square, Bitboard occupancy) {
+INLINE Bitboard getRookAttacks(const Square square, Bitboard occupancy) {
     occupancy &= rookMasks[square];
     occupancy *= rookMagics[square];
     occupancy >>= 64 - rookRelevantOccBits[square];
