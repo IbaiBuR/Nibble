@@ -16,12 +16,11 @@ uint32_t randU32() {
 }
 
 uint64_t randU64() {
-    uint64_t n1, n2, n3, n4;
 
-    n1 = (uint64_t)(randU32()) & 0xFFFF;
-    n2 = (uint64_t)(randU32()) & 0xFFFF;
-    n3 = (uint64_t)(randU32()) & 0xFFFF;
-    n4 = (uint64_t)(randU32()) & 0xFFFF;
+    const uint64_t n1 = (uint64_t)(randU32()) & 0xFFFF;
+    const uint64_t n2 = (uint64_t)(randU32()) & 0xFFFF;
+    const uint64_t n3 = (uint64_t)(randU32()) & 0xFFFF;
+    const uint64_t n4 = (uint64_t)(randU32()) & 0xFFFF;
 
     return n1 | (n2 << 16) | (n3 << 32) | (n4 << 48);
 }
