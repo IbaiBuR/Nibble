@@ -3,7 +3,8 @@
 #include "bitboard.h"
 
 INLINE void addMove(const Move move, MoveList *moveList) {
-    moveList->moves[moveList->count] = move;
+    moveList->moves[moveList->count].move = move;
+    moveList->moves[moveList->count].score = 0;
     moveList->count++;
 }
 

@@ -114,6 +114,6 @@ typedef struct ScoredMove {
 } ScoredMove;
 
 typedef struct MoveList {
-    uint32_t count;
-    Move     moves[MAX_MOVES];
+    uint32_t   count;
+    ScoredMove moves[MAX_MOVES];
 } MoveList;
