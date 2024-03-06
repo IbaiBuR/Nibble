@@ -5,15 +5,11 @@ HEADERS = *.h
 FLAGS = -oFast -std=c2x -march=native
 EXE = nibble
 
-.PHONY: clean
+.PHONY: all format clean
 
 all:
 	$(CC) $(FLAGS) $(SRCS) -o $(EXE)
 	$(CW) $(FLAGS) $(SRCS) -o $(EXE)
-
-debug:
-	$(CC) $(SRCS) -o $(EXE)
-	$(CW) $(SRCS) -o $(EXE)
 
 format:
 	clang-format -i $(SRCS) $(HEADERS) -style=file

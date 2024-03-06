@@ -1,4 +1,4 @@
 cd ../src
-make debug
+make
 ./nibble
 make clean
