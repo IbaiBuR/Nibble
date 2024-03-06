@@ -4,6 +4,10 @@
 
 #define startPosFen "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
+#define squareOf(file, rank) ((rank << 3) + file)
+#define fileOf(square)       (square & 7)
+#define rankOf(square)       (square >> 3)
+
 static const char *squareToCoordinates[SQUARE_NB] = {
     "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8", "a7", "b7", "c7",
     "d7", "e7", "f7", "g7", "h7", "a6", "b6", "c6", "d6", "e6", "f6",

@@ -6,12 +6,8 @@
 
 #define INLINE static inline __attribute__((always_inline))
 
-#define squareOf(file, rank) ((rank << 3) + file)
-#define fileOf(square)       (square & 7)
-#define rankOf(square)       (square >> 3)
-
 typedef uint64_t Bitboard;
-typedef uint32_t Move;
+typedef uint16_t Move;
 typedef int32_t  Score;
 
 // clang-format off

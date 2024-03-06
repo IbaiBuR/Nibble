@@ -13,4 +13,6 @@ add_executable(Nibble src/nibble.c
         src/board.h
         src/movegen.c
         src/movegen.h
+        src/move.c
+        src/move.h
 )
