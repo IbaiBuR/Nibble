@@ -9,6 +9,7 @@
 typedef uint64_t Bitboard;
 typedef uint16_t Move;
 typedef int32_t  Score;
+typedef char     SquareName[3];
 
 // clang-format off
 typedef enum Square : int {
