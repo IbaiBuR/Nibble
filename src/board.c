@@ -105,13 +105,16 @@ void parseFen(const char *fen, Board *board) {
         case 'q':
             board->castling |= BQ;
             break;
+        default:
+            printf("Invalid castling rights!\n");
+            break;
         }
         fen++;
     }
 
     fen++;
     board->epSq =
-        (*fen != '-') ? squareOf(fen[0] - 'a', 8 - (fen[1] - '0')) : NO_SQ;
+        *fen != '-' ? squareOf(fen[0] - 'a', (8 - (fen[1] - '0'))) : NO_SQ;
 
     while (*fen && *fen != ' ')
         fen++;

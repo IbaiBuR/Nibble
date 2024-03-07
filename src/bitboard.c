@@ -20,16 +20,15 @@ Bitboard genPawnAttacks(const Square sq, const Color c) {
 
     setBit(bb, sq);
 
-    switch (c)
+    if (c == WHITE)
     {
-    case WHITE:
         attacks |= shiftNW(bb);
         attacks |= shiftNE(bb);
-        break;
-    case BLACK:
+    }
+    else
+    {
         attacks |= shiftSW(bb);
         attacks |= shiftSE(bb);
-        break;
     }
 
     return attacks;

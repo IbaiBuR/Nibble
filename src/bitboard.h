@@ -99,15 +99,23 @@ static constexpr uint64_t bishopMagics[64] = {
     0x28000010020204ULL,   0x6000020202D0240ULL,  0x8918844842082200ULL,
     0x4010011029020020ULL};
 
-static Bitboard bitOf(const Square sq) { return 1ULL << sq; }
-static Bitboard shiftN(const Bitboard bb) { return bb >> 8; }
-static Bitboard shiftS(const Bitboard bb) { return bb << 8; }
-static Bitboard shiftW(const Bitboard bb) { return bb >> 1; }
-static Bitboard shiftE(const Bitboard bb) { return bb << 1; }
-static Bitboard shiftNW(const Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
-static Bitboard shiftNE(const Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
-static Bitboard shiftSW(const Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
-static Bitboard shiftSE(const Bitboard bb) { return (bb << 9) & NOT_A_FILE; }
+static inline Bitboard bitOf(const Square sq) { return 1ULL << sq; }
+static inline Bitboard shiftN(const Bitboard bb) { return bb >> 8; }
+static inline Bitboard shiftS(const Bitboard bb) { return bb << 8; }
+static inline Bitboard shiftW(const Bitboard bb) { return bb >> 1; }
+static inline Bitboard shiftE(const Bitboard bb) { return bb << 1; }
+static inline Bitboard shiftNW(const Bitboard bb) {
+    return (bb >> 7) & NOT_A_FILE;
+}
+static inline Bitboard shiftNE(const Bitboard bb) {
+    return (bb >> 9) & NOT_H_FILE;
+}
+static inline Bitboard shiftSW(const Bitboard bb) {
+    return (bb << 7) & NOT_H_FILE;
+}
+static inline Bitboard shiftSE(const Bitboard bb) {
+    return (bb << 9) & NOT_A_FILE;
+}
 
 extern Bitboard pawnAttacks[COLOR_NB][SQUARE_NB];
 extern Bitboard knightAttacks[SQUARE_NB];
