@@ -2,19 +2,19 @@
 
 #include "types.h"
 
-#define NOT_A_FILE  0xFEFEFEFEFEFEFEFEULL
-#define NOT_H_FILE  0x7F7F7F7F7F7F7F7FULL
-#define NOT_AB_FILE 0xFCFCFCFCFCFCFCFCULL
-#define NOT_HG_FILE 0x3F3F3F3F3F3F3F3FULL
+constexpr Bitboard NOT_A_FILE  = 0xFEFEFEFEFEFEFEFEULL;
+constexpr Bitboard NOT_H_FILE  = 0x7F7F7F7F7F7F7F7FULL;
+constexpr Bitboard NOT_AB_FILE = 0xFCFCFCFCFCFCFCFCULL;
+constexpr Bitboard NOT_HG_FILE = 0x3F3F3F3F3F3F3F3FULL;
 
-#define rank1 0xFF00000000000000ULL
-#define rank2 0x00FF000000000000ULL
-#define rank3 0x0000FF0000000000ULL
-#define rank4 0x000000FF00000000ULL
-#define rank5 0x00000000FF000000ULL
-#define rank6 0x0000000000FF0000ULL
-#define rank7 0x000000000000FF00ULL
-#define rank8 0x00000000000000FFULL
+constexpr Bitboard rank1 = 0xFF00000000000000ULL;
+constexpr Bitboard rank2 = 0x00FF000000000000ULL;
+constexpr Bitboard rank3 = 0x0000FF0000000000ULL;
+constexpr Bitboard rank4 = 0x000000FF00000000ULL;
+constexpr Bitboard rank5 = 0x00000000FF000000ULL;
+constexpr Bitboard rank6 = 0x0000000000FF0000ULL;
+constexpr Bitboard rank7 = 0x000000000000FF00ULL;
+constexpr Bitboard rank8 = 0x00000000000000FFULL;
 
 #define getBit(bitboard, square)   (bitboard & bitOf(square))
 #define setBit(bitboard, square)   (bitboard |= bitOf(square))
