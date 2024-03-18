@@ -8,7 +8,7 @@
 #define fileOf(square)       (square & 7)
 #define rankOf(square)       (square >> 3)
 
-static constexpr SquareName squareToCoordinates[SQUARE_NB] = {
+constexpr SquareName squareToCoordinates[SQUARE_NB] = {
     "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8", "a7", "b7", "c7",
     "d7", "e7", "f7", "g7", "h7", "a6", "b6", "c6", "d6", "e6", "f6",
     "g6", "h6", "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5", "a4",
@@ -17,9 +17,9 @@ static constexpr SquareName squareToCoordinates[SQUARE_NB] = {
     "h2", "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
 };
 
-static constexpr char pieceToChar[PIECE_NB] = "PNBRQKpnbrqk";
+constexpr char pieceToChar[PIECE_NB] = "PNBRQKpnbrqk";
 
-static constexpr int charToPiece[] = {
+constexpr int charToPiece[] = {
     ['P'] = W_PAWN,   ['N'] = W_KNIGHT, ['B'] = W_BISHOP, ['R'] = W_ROOK,
     ['Q'] = W_QUEEN,  ['K'] = W_KING,   ['p'] = B_PAWN,   ['n'] = B_KNIGHT,
     ['b'] = B_BISHOP, ['r'] = B_ROOK,   ['q'] = B_QUEEN,  ['k'] = B_KING};

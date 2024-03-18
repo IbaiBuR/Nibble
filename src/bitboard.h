@@ -25,7 +25,7 @@ constexpr Bitboard rank8 = 0x00000000000000FFULL;
 
 // clang-format off
 // Relevant occupancy bits for bishops
-static constexpr int bishopRelevantOccBits[64] = {
+constexpr int bishopRelevantOccBits[64] = {
     6, 5, 5, 5, 5, 5, 5, 6,
     5, 5, 5, 5, 5, 5, 5, 5,
     5, 5, 7, 7, 7, 7, 5, 5,
@@ -37,7 +37,7 @@ static constexpr int bishopRelevantOccBits[64] = {
 };
 
 // Relevant occupancy bits for rooks
-static constexpr int rookRelevantOccBits[64] = {
+constexpr int rookRelevantOccBits[64] = {
     12, 11, 11, 11, 11, 11, 11, 12,
     11, 10, 10, 10, 10, 10, 10, 11,
     11, 10, 10, 10, 10, 10, 10, 11,
@@ -50,7 +50,7 @@ static constexpr int rookRelevantOccBits[64] = {
 // clang-format on
 
 // rook magic numbers
-static constexpr uint64_t rookMagics[64] = {
+constexpr uint64_t rookMagics[64] = {
     0x8A80104000800020ULL, 0x140002000100040ULL,  0x2801880A0017001ULL,
     0x100081001000420ULL,  0x200020010080420ULL,  0x3001C0002010008ULL,
     0x8480008002000100ULL, 0x2080088004402900ULL, 0x800098204000ULL,
@@ -75,7 +75,7 @@ static constexpr uint64_t rookMagics[64] = {
     0x1004081002402ULL};
 
 // bishop magic numbers
-static constexpr uint64_t bishopMagics[64] = {
+constexpr uint64_t bishopMagics[64] = {
     0x40040844404084ULL,   0x2004208A004208ULL,   0x10190041080202ULL,
     0x108060845042010ULL,  0x581104180800210ULL,  0x2112080446200010ULL,
     0x1080820820060210ULL, 0x3C0808410220200ULL,  0x4050404440404ULL,
