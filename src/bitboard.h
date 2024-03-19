@@ -99,6 +99,12 @@ constexpr uint64_t bishopMagics[64] = {
     0x28000010020204ULL,   0x6000020202D0240ULL,  0x8918844842082200ULL,
     0x4010011029020020ULL};
 
+static inline Square popLsb(Bitboard *bb) {
+    const Square sq = lsbIndex(*bb);
+    *bb &= *bb - 1;
+    return sq;
+}
+
 static inline Bitboard bitOf(const Square sq) { return 1ULL << sq; }
 static inline Bitboard shiftN(const Bitboard bb) { return bb >> 8; }
 static inline Bitboard shiftS(const Bitboard bb) { return bb << 8; }
