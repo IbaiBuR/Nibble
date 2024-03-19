@@ -9,6 +9,9 @@ void initializeBoard(Board *board) {
     memset(board->pieceBB, 0ULL, sizeof(board->pieceBB));
     memset(board->occupancies, 0ULL, sizeof(board->occupancies));
 
+    board->checkers = 0ULL;
+    board->pinned   = 0ULL;
+
     board->stm            = WHITE;
     board->epSq           = NO_SQ;
     board->castling       = 0;

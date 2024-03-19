@@ -102,6 +102,8 @@ enum castlingMask : int {
 typedef struct Board {
     Bitboard pieceBB[PIECE_NB];         // bitboards for each piece type
     Bitboard occupancies[COLOR_NB + 1]; // occupancies for white, black and both
+    Bitboard checkers;                  // bitboard for pieces that give check
+    Bitboard pinned;                    // bitboard for pinned pieces
     int      stm;                       // side to move
     int      epSq;                      // en-passant square
     int      castling;                  // castling mask
