@@ -2,9 +2,9 @@
 
 #include <inttypes.h>
 
-#define MAX_MOVES 256
-
 #define INLINE static inline __attribute__((always_inline))
+
+constexpr int MAX_MOVES = 256;
 
 typedef uint64_t Bitboard;
 typedef uint16_t Move;

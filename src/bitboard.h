@@ -2,6 +2,13 @@
 
 #include "types.h"
 
+#define getBit(bitboard, square)   (bitboard & bitOf(square))
+#define setBit(bitboard, square)   (bitboard |= bitOf(square))
+#define resetBit(bitboard, square) (bitboard ^= bitOf(square) & bitboard)
+#define bitCount(bitboard)         (__builtin_popcountll(bitboard))
+#define lsbIndex(bb)               (__builtin_ctzll(bb))
+#define msbIndex(bb)               (63 ^ __builtin_clzll(bb))
+
 constexpr Bitboard NOT_A_FILE  = 0xFEFEFEFEFEFEFEFEULL;
 constexpr Bitboard NOT_H_FILE  = 0x7F7F7F7F7F7F7F7FULL;
 constexpr Bitboard NOT_AB_FILE = 0xFCFCFCFCFCFCFCFCULL;
@@ -15,13 +22,6 @@ constexpr Bitboard rank5 = 0x00000000FF000000ULL;
 constexpr Bitboard rank6 = 0x0000000000FF0000ULL;
 constexpr Bitboard rank7 = 0x000000000000FF00ULL;
 constexpr Bitboard rank8 = 0x00000000000000FFULL;
-
-#define getBit(bitboard, square)   (bitboard & bitOf(square))
-#define setBit(bitboard, square)   (bitboard |= bitOf(square))
-#define resetBit(bitboard, square) (bitboard ^= bitOf(square) & bitboard)
-#define bitCount(bitboard)         (__builtin_popcountll(bitboard))
-#define lsbIndex(bb)               (__builtin_ctzll(bb))
-#define msbIndex(bb)               (63 ^ __builtin_clzll(bb))
 
 // clang-format off
 // Relevant occupancy bits for bishops
