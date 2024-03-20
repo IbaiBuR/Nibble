@@ -161,3 +161,17 @@ inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
 inline Bitboard pieceBB(const Board *board, const PieceType pt, const Color c) {
     return board->pieceBB[pt + c * 6];
 }
+
+Bitboard attacksToKing(const Board *board, const Square kingSq, const Color c) {
+    const Bitboard oppPawns   = pieceBB(board, PAWN, c ^ 1);
+    const Bitboard oppKnights = pieceBB(board, KNIGHT, c ^ 1);
+    const Bitboard bishopsQueens =
+        pieceBB(board, BISHOP, c ^ 1) | pieceBB(board, QUEEN, c ^ 1);
+    const Bitboard rooksQueens =
+        pieceBB(board, ROOK, c ^ 1) | pieceBB(board, QUEEN, c ^ 1);
+
+    return (pawnAttacks[c][kingSq] & oppPawns)
+         | (knightAttacks[kingSq] & oppKnights)
+         | (getBishopAttacks(kingSq, board->occupancies[c ^ 1]) & bishopsQueens)
+         | (getRookAttacks(kingSq, board->occupancies[c ^ 1]) & rooksQueens);
+}

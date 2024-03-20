@@ -217,26 +217,6 @@ Bitboard setOccupancies(const int index, const int nBits, Bitboard attacks) {
     return occupancies;
 }
 
-// returns all attacks to a given square
-inline Bitboard
-attacksToSq(const Board *board, const Square sq, const Bitboard occupancy) {
-    Bitboard bishopsQueens;
-
-    const Bitboard knights =
-        board->pieceBB[W_KNIGHT] | board->pieceBB[B_KNIGHT];
-    const Bitboard kings = board->pieceBB[W_KING] | board->pieceBB[B_KING];
-    Bitboard       rooksQueens = bishopsQueens =
-        board->pieceBB[W_QUEEN] | board->pieceBB[B_QUEEN];
-    rooksQueens |= board->pieceBB[W_ROOK] | board->pieceBB[B_ROOK];
-    bishopsQueens |= board->pieceBB[W_BISHOP] | board->pieceBB[B_BISHOP];
-
-    return (pawnAttacks[WHITE][sq] & board->pieceBB[B_PAWN])
-         | (pawnAttacks[BLACK][sq] & board->pieceBB[W_PAWN])
-         | (knightAttacks[sq] & knights) | (kingAttacks[sq] & kings)
-         | (getBishopAttacks(sq, occupancy) & bishopsQueens)
-         | (getRookAttacks(sq, occupancy) & rooksQueens);
-}
-
 inline void initBB() {
     for (Square sq = A8; sq < SQUARE_NB; sq++)
     {

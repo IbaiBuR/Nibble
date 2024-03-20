@@ -139,7 +139,6 @@ Bitboard genRookMasks(Square square);
 Bitboard genBishopAttacks(Square square, Bitboard blockers);
 Bitboard genRookAttacks(Square square, Bitboard blockers);
 Bitboard setOccupancies(int index, int nBits, Bitboard attacks);
-Bitboard attacksToSq(const Board *board, Square square, Bitboard occupancy);
 
 INLINE Bitboard getBishopAttacks(const Square square, Bitboard occupancy) {
     occupancy &= bishopMasks[square];
