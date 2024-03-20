@@ -132,6 +132,8 @@ void parseFen(const char *fen, Board *board) {
 
     board->occupancies[COLOR_NB] |= board->occupancies[WHITE];
     board->occupancies[COLOR_NB] |= board->occupancies[BLACK];
+
+    board->checkers |= attacksToKing(board, lsbIndex(pieceBB(board, KING, board->stm)), board->stm);
 }
 
 // returns whether a square is attacked by a side
