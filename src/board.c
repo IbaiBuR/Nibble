@@ -135,7 +135,7 @@ void parseFen(const char *fen, Board *board) {
 }
 
 // returns whether a square is attacked by a side
-// useful to check if king is in check
+// useful to validate if king is in check
 inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
     if (pawnAttacks[c ^ 1][sq]
         & ((c == WHITE) ? board->pieceBB[B_PAWN] : board->pieceBB[W_PAWN]))
