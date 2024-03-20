@@ -32,9 +32,7 @@ void printBoard(const Board board) {
                 if (getBit(board.pieceBB[bbPiece], squareOf(file, rank)))
                     currentPiece = bbPiece;
 
-            printf(" | %c", (currentPiece == NO_PIECE)
-                                ? ' '
-                                : pieceToChar[currentPiece]);
+            printf(" | %c", (currentPiece == NO_PIECE) ? ' ' : pieceToChar[currentPiece]);
         }
         printf(" | %d\n +---+---+---+---+---+---+---+---+\n", 8 - rank);
     }
@@ -116,8 +114,7 @@ void parseFen(const char *fen, Board *board) {
     }
 
     fen++;
-    board->epSq =
-        *fen != '-' ? squareOf(fen[0] - 'a', (8 - (fen[1] - '0'))) : NO_SQ;
+    board->epSq = *fen != '-' ? squareOf(fen[0] - 'a', (8 - (fen[1] - '0'))) : NO_SQ;
 
     while (*fen && *fen != ' ')
         fen++;
@@ -139,14 +136,11 @@ void parseFen(const char *fen, Board *board) {
 // returns whether a square is attacked by a side
 // useful to validate if king is in check
 inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
-    if (pawnAttacks[c ^ 1][sq]
-        & ((c == WHITE) ? board->pieceBB[B_PAWN] : board->pieceBB[W_PAWN]))
+    if (pawnAttacks[c ^ 1][sq] & ((c == WHITE) ? board->pieceBB[B_PAWN] : board->pieceBB[W_PAWN]))
         return true;
-    if (knightAttacks[sq]
-        & ((c == WHITE) ? board->pieceBB[W_KNIGHT] : board->pieceBB[B_KNIGHT]))
+    if (knightAttacks[sq] & ((c == WHITE) ? board->pieceBB[W_KNIGHT] : board->pieceBB[B_KNIGHT]))
         return true;
-    if (kingAttacks[sq]
-        & ((c == WHITE) ? board->pieceBB[W_KING] : board->pieceBB[B_KING]))
+    if (kingAttacks[sq] & ((c == WHITE) ? board->pieceBB[W_KING] : board->pieceBB[B_KING]))
         return true;
     if (getBishopAttacks(sq, board->occupancies[COLOR_NB])
         & ((c == WHITE) ? (board->pieceBB[W_QUEEN] | board->pieceBB[W_BISHOP])
@@ -165,15 +159,12 @@ inline Bitboard pieceBB(const Board *board, const PieceType pt, const Color c) {
 }
 
 Bitboard attacksToKing(const Board *board, const Square kingSq, const Color c) {
-    const Bitboard oppPawns   = pieceBB(board, PAWN, c ^ 1);
-    const Bitboard oppKnights = pieceBB(board, KNIGHT, c ^ 1);
-    const Bitboard bishopsQueens =
-        pieceBB(board, BISHOP, c ^ 1) | pieceBB(board, QUEEN, c ^ 1);
-    const Bitboard rooksQueens =
-        pieceBB(board, ROOK, c ^ 1) | pieceBB(board, QUEEN, c ^ 1);
+    const Bitboard oppPawns      = pieceBB(board, PAWN, c ^ 1);
+    const Bitboard oppKnights    = pieceBB(board, KNIGHT, c ^ 1);
+    const Bitboard bishopsQueens = pieceBB(board, BISHOP, c ^ 1) | pieceBB(board, QUEEN, c ^ 1);
+    const Bitboard rooksQueens   = pieceBB(board, ROOK, c ^ 1) | pieceBB(board, QUEEN, c ^ 1);
 
-    return (pawnAttacks[c][kingSq] & oppPawns)
-         | (knightAttacks[kingSq] & oppKnights)
+    return (pawnAttacks[c][kingSq] & oppPawns) | (knightAttacks[kingSq] & oppKnights)
          | (getBishopAttacks(kingSq, board->occupancies[c ^ 1]) & bishopsQueens)
          | (getRookAttacks(kingSq, board->occupancies[c ^ 1]) & rooksQueens);
 }

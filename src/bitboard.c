@@ -251,25 +251,24 @@ inline void printBB(const Bitboard bitboard) {
 inline void initSlidersAttacks(const PieceType pt) {
     for (Square sq = A8; sq < SQUARE_NB; sq++)
     {
-        const Bitboard attackMask =
-            pt == BISHOP ? bishopMasks[sq] : rookMasks[sq];
-        const int nBits          = bitCount(attackMask);
-        const int occupancyIndex = (1 << nBits);
+        const Bitboard attackMask     = pt == BISHOP ? bishopMasks[sq] : rookMasks[sq];
+        const int      nBits          = bitCount(attackMask);
+        const int      occupancyIndex = (1 << nBits);
 
         for (int i = 0; i < occupancyIndex; i++)
         {
             if (pt == BISHOP)
             {
                 const Bitboard occupancy = setOccupancies(i, nBits, attackMask);
-                const int      magicIndex = (occupancy * bishopMagics[sq])
-                                    >> (64 - bishopRelevantOccBits[sq]);
+                const int      magicIndex =
+                    (occupancy * bishopMagics[sq]) >> (64 - bishopRelevantOccBits[sq]);
                 bishopAttacks[sq][magicIndex] = genBishopAttacks(sq, occupancy);
             }
             else
             {
                 const Bitboard occupancy = setOccupancies(i, nBits, attackMask);
-                const int      magicIndex = (occupancy * rookMagics[sq])
-                                    >> (64 - rookRelevantOccBits[sq]);
+                const int      magicIndex =
+                    (occupancy * rookMagics[sq]) >> (64 - rookRelevantOccBits[sq]);
                 rookAttacks[sq][magicIndex] = genRookAttacks(sq, occupancy);
             }
         }
