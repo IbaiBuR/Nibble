@@ -29,3 +29,4 @@ void printBoard(Board board);
 void parseFen(const char *fen, Board *board);
 
 bool attackedBySide(const Board *board, Square square, Color color);
+Bitboard pieceBB(const Board *board, PieceType pieceType, Color color);

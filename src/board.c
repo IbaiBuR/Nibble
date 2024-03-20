@@ -157,3 +157,7 @@ inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
 
     return false;
 }
+
+inline Bitboard pieceBB(const Board *board, const PieceType pt, const Color c) {
+    return board->pieceBB[pt + c * 6];
+}
