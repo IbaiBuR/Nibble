@@ -136,6 +136,9 @@ INLINE Bitboard getRookAttacks(const Square square, Bitboard occupancy) {
     return rookAttacks[square][occupancy];
 }
 
+Bitboard singlePawnPush(Bitboard pawns, Bitboard empty, Color color);
+Bitboard doublePawnPush(Bitboard pawns, Bitboard empty, Color color);
+
 void initBB();
 void printBB(Bitboard bitboard);
 void initSlidersAttacks(PieceType pieceType);
