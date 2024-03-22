@@ -119,6 +119,7 @@ Bitboard genRookMasks(Square square);
 Bitboard genBishopAttacks(Square square, Bitboard blockers);
 Bitboard genRookAttacks(Square square, Bitboard blockers);
 Bitboard setOccupancies(int index, int nBits, Bitboard attacks);
+Bitboard getAttacksByPieceType(PieceType pieceType, Square square, Bitboard blockers);
 
 INLINE Bitboard getBishopAttacks(const Square square, Bitboard occupancy) {
     occupancy &= bishopMasks[square];

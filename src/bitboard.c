@@ -217,6 +217,34 @@ Bitboard setOccupancies(const int index, const int nBits, Bitboard attacks) {
     return occupancies;
 }
 
+Bitboard getAttacksByPieceType(const PieceType pt, const Square sq, const Bitboard blockers) {
+    switch (pt)
+    {
+    case PAWN:
+        return pawnAttacks[sq];
+        break;
+    case KNIGHT:
+        return knightAttacks[sq];
+        break;
+    case KING:
+        return kingAttacks[sq];
+        break;
+    case BISHOP:
+        return getBishopAttacks(sq, blockers);
+        break;
+    case ROOK:
+        return getRookAttacks(sq, blockers);
+        break;
+    case QUEEN:
+        return getBishopAttacks(sq, blockers) | getRookAttacks(sq, blockers);
+        break;
+    default:
+        printf("Invalid piece type.\n");
+        return 0ULL;
+        break;
+    }
+}
+
 inline void initBB() {
     for (Square sq = A8; sq < SQUARE_NB; sq++)
     {
