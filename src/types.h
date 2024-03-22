@@ -49,7 +49,7 @@ typedef enum Rank : int {
     RANK_NB
 } Rank;
 
-enum Direction : int {
+typedef enum Direction : int {
     NORTH      = 8,
     SOUTH      = -NORTH,
     EAST       = 1,
@@ -58,7 +58,7 @@ enum Direction : int {
     NORTH_WEST = NORTH + WEST,
     SOUTH_EAST = SOUTH + EAST,
     SOUTH_WEST = SOUTH + WEST
-};
+} Direction;
 
 typedef enum Color : int {
     WHITE,
