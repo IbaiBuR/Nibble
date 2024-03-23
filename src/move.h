@@ -2,7 +2,7 @@
 
 #include "types.h"
 
-#define makeMove(from, to, flag) ((from) | (to << 6) | (flag << 12))
+#define buildMove(from, to, flag) ((from) | (to << 6) | (flag << 12))
 #define from(move)               ((move & 0x3F))
 #define to(move)                 (((move >> 6) & 0x3F))
 #define flag(move)               (((move >> 12) & 0x0F))

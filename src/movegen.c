@@ -1,5 +1,7 @@
 #include "movegen.h"
 
+#include <stdio.h>
+
 #include "bitboard.h"
 #include "board.h"
 #include "move.h"
@@ -16,6 +18,13 @@ void initializeMoveList(MoveList *moveList) {
     moveList->moves->score = 0;
 }
 
+void printMoveList(const MoveList moveList) {
+    for (uint32_t i = 0; i < moveList.count; i++)
+    {
+        printf("%d. %-2s\n", i, moveToString(moveList.moves[i].move));
+    }
+}
+
 static inline void
 quietPawnMoves(const Board *board, MoveList *moveList, const Color c, const Bitboard empty) {
     const Bitboard  pawns     = pieceBB(board, PAWN, c);
@@ -27,13 +36,38 @@ quietPawnMoves(const Board *board, MoveList *moveList, const Color c, const Bitb
     while (singlePush)
     {
         const Square to = popLsb(&singlePush);
-        addMove(makeMove(to - movingDir, to, QUIET), moveList);
+        addMove(buildMove(to - movingDir, to, QUIET), moveList);
     }
 
     while (doublePush)
     {
         const Square to = popLsb(&doublePush);
-        addMove(makeMove(to - movingDir * 2, to, DOUBLEPUSH), moveList);
+        addMove(buildMove(to - movingDir * 2, to, DOUBLEPUSH), moveList);
+    }
+}
+
+static inline void pawnCaptures(const Board *board, MoveList *moveList, const Color c) {
+    Bitboard pawns = pieceBB(board, PAWN, c);
+
+    while (pawns)
+    {
+        const Square from                 = popLsb(&pawns);
+        Bitboard     possiblePawnCaptures = pawnAttacks[c][from] & board->occupancies[c ^ 1];
+
+        while (possiblePawnCaptures)
+        {
+            addMove(buildMove(from, popLsb(&possiblePawnCaptures), CAPTURE), moveList);
+        }
+    }
+
+    if (board->epSq != NO_SQ)
+    {
+        Bitboard epPawns = pawnAttacks[c ^ 1][board->epSq] & pieceBB(board, PAWN, c);
+
+        while (epPawns)
+        {
+            addMove(buildMove(popLsb(&epPawns), board->epSq, ENPASSANT), moveList);
+        }
     }
 }
 
@@ -41,29 +75,59 @@ static inline void quietPieceMoves(const Board    *board,
                                    MoveList       *moveList,
                                    const Color     c,
                                    const PieceType pt,
-                                   const Bitboard  emtpy) {
+                                   const Bitboard  empty) {
     Bitboard pieces = pieceBB(board, pt, c);
 
     while (pieces)
     {
         const Square from = popLsb(&pieces);
         Bitboard     possiblePieceMoves =
-            getAttacksByPieceType(pt, from, board->occupancies[COLOR_NB]) & emtpy;
+            getAttacksByPieceType(pt, from, board->occupancies[COLOR_NB]) & empty;
 
         while (possiblePieceMoves)
         {
-            addMove(makeMove(from, popLsb(&possiblePieceMoves), QUIET), moveList);
+            addMove(buildMove(from, popLsb(&possiblePieceMoves), QUIET), moveList);
+        }
+    }
+}
+
+static inline void
+pieceCaptures(const Board *board, MoveList *moveList, const Color c, const PieceType pt) {
+    Bitboard pieces = pieceBB(board, pt, c);
+
+    while (pieces)
+    {
+        const Square from = popLsb(&pieces);
+        Bitboard     possiblePieceCaptures =
+            getAttacksByPieceType(pt, from, board->occupancies[COLOR_NB]) & board->occupancies[c ^ 1];
+
+        while (possiblePieceCaptures)
+        {
+            addMove(buildMove(from, popLsb(&possiblePieceCaptures), CAPTURE), moveList);
         }
     }
 }
 
 inline void generateAllQuiets(const Board *board, MoveList *moveList, const Color c) {
-    const Bitboard empty = ~board->occupancies[COLOR_NB];
 
-    quietPawnMoves(board, moveList, c, empty);
+    quietPawnMoves(board, moveList, c, ~board->occupancies[COLOR_NB]);
 
     for (PieceType pt = KNIGHT; pt <= KING; pt++)
     {
-        quietPieceMoves(board, moveList, c, pt, empty);
+        quietPieceMoves(board, moveList, c, pt, ~board->occupancies[COLOR_NB]);
     }
+}
+
+inline void generateAllCaptures(const Board *board, MoveList *moveList, const Color c) {
+    pawnCaptures(board, moveList, c);
+
+    for (PieceType pt = KNIGHT; pt <= KING; pt++)
+    {
+        pieceCaptures(board, moveList, c, pt);
+    }
+}
+
+inline void generateAllMoves(const Board *board, MoveList *moveList, const Color c) {
+    generateAllQuiets(board, moveList, c);
+    generateAllCaptures(board, moveList, c);
 }
