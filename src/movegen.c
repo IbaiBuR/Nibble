@@ -110,20 +110,35 @@ pieceCaptures(const Board *board, MoveList *moveList, const Color c, const Piece
 
 inline void generateAllQuiets(const Board *board, MoveList *moveList, const Color c) {
 
-    quietPawnMoves(board, moveList, c, ~board->occupancies[COLOR_NB]);
-
-    for (PieceType pt = KNIGHT; pt <= KING; pt++)
+    if (bitCount(board->checkers) < 2)
     {
-        quietPieceMoves(board, moveList, c, pt, ~board->occupancies[COLOR_NB]);
+        quietPawnMoves(board, moveList, c, ~board->occupancies[COLOR_NB]);
+
+        for (PieceType pt = KNIGHT; pt <= KING; pt++)
+        {
+            quietPieceMoves(board, moveList, c, pt, ~board->occupancies[COLOR_NB]);
+        }
+    }
+    else
+    {
+        quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
     }
 }
 
 inline void generateAllCaptures(const Board *board, MoveList *moveList, const Color c) {
-    pawnCaptures(board, moveList, c);
 
-    for (PieceType pt = KNIGHT; pt <= KING; pt++)
+    if(bitCount(board->checkers < 2))
     {
-        pieceCaptures(board, moveList, c, pt);
+        pawnCaptures(board, moveList, c);
+
+        for (PieceType pt = KNIGHT; pt <= KING; pt++)
+        {
+            pieceCaptures(board, moveList, c, pt);
+        }
+    }
+    else
+    {
+        pieceCaptures(board, moveList, c, KING);
     }
 }
 
