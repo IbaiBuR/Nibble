@@ -92,23 +92,23 @@ typedef enum Piece : int {
     NO_PIECE = -1
 } Piece;
 
-enum castlingMask : int {
+typedef enum CastlingMask : int {
     WK = 1, // 0001 white can castle kingside
     WQ = 2, // 0010 white can castle queenside
     BK = 4, // 0100 black can castle kingside
     BQ = 8, // 1000 black can castle queenside
-};
+} CastlingMask;
 
 typedef struct Board {
-    Bitboard pieceBB[PIECE_NB];         // bitboards for each piece type
-    Bitboard occupancies[COLOR_NB + 1]; // occupancies for white, black and both
-    Bitboard checkers;                  // bitboard for pieces that give check
-    Bitboard pinned;                    // bitboard for pinned pieces
-    Color    stm;                       // side to move
-    int      epSq;                      // en-passant square
-    int      castling;                  // castling mask
-    int      fmr;                       // halfmoves till fifty-move rule
-    int      fullMoveNumber;            // number of fullmoves
+    Bitboard     pieceBB[PIECE_NB];         // bitboards for each piece type
+    Bitboard     occupancies[COLOR_NB + 1]; // occupancies for white, black and both
+    Bitboard     checkers;                  // bitboard for pieces that give check
+    Bitboard     pinned;                    // bitboard for pinned pieces
+    Color        stm;                       // side to move
+    Square       epSq;                      // en-passant square
+    CastlingMask castling;                  // castling mask
+    int          fmr;                       // halfmoves till fifty-move rule
+    int          fullMoveNumber;            // number of fullmoves
 } Board;
 
 typedef struct ScoredMove {
