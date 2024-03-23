@@ -104,7 +104,7 @@ typedef struct Board {
     Bitboard occupancies[COLOR_NB + 1]; // occupancies for white, black and both
     Bitboard checkers;                  // bitboard for pieces that give check
     Bitboard pinned;                    // bitboard for pinned pieces
-    int      stm;                       // side to move
+    Color    stm;                       // side to move
     int      epSq;                      // en-passant square
     int      castling;                  // castling mask
     int      fmr;                       // halfmoves till fifty-move rule
