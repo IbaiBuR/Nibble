@@ -26,7 +26,7 @@ void printMoveList(const MoveList moveList) {
 }
 
 static inline void
-quietPawnMoves(const Board *board, MoveList *moveList, const Color c, const Bitboard empty) {
+generatePawnPushes(const Board *board, MoveList *moveList, const Color c, const Bitboard empty) {
     const Bitboard  pawns  = pieceBB(board, PAWN, c);
     const Direction offset = c == WHITE ? SOUTH : NORTH;
 
@@ -134,8 +134,28 @@ pieceCaptures(const Board *board, MoveList *moveList, const Color c, const Piece
     }
 }
 
+static inline void generateCastlingMoves(const Board *board, MoveList *moveList, const Color c) {
+    const Bitboard occupied = board->occupancies[COLOR_NB];
+
+    if (c == WHITE)
+    {
+        if (board->castling & WK && !getBit(occupied, G1) && !getBit(occupied, F1))
+            addMove(buildMove(E1, G1, CASTLE), moveList);
+        if (board->castling & WQ && !getBit(occupied, D1) && !getBit(occupied, C1)
+            && !getBit(occupied, B1))
+            addMove(buildMove(E1, C1, CASTLE), moveList);
+    }
+    else
+    {
+        if (board->castling & BK && !getBit(occupied, G8) && !getBit(occupied, F8))
+            addMove(buildMove(E8, G8, CASTLE), moveList);
+        if (board->castling & BQ && !getBit(occupied, D8) && !getBit(occupied, C8)
+            && !getBit(occupied, B8))
+            addMove(buildMove(E8, C8, CASTLE), moveList);
+    }
+}
+
 inline void generateAllQuiets(const Board *board, MoveList *moveList, const Color c) {
-    quietPawnMoves(board, moveList, c, ~board->occupancies[COLOR_NB]);
 
     for (PieceType pt = KNIGHT; pt <= KING; pt++)
     {
@@ -162,7 +182,9 @@ inline void generateAllMoves(const Board *board, MoveList *moveList, const Color
     }
     else
     {
+        generatePawnPushes(board, moveList, c, ~board->occupancies[COLOR_NB]);
         generateAllQuiets(board, moveList, c);
         generateAllCaptures(board, moveList, c);
+        generateCastlingMoves(board, moveList, c);
     }
 }
