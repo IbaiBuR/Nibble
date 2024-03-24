@@ -21,28 +21,40 @@ void initializeMoveList(MoveList *moveList) {
 void printMoveList(const MoveList moveList) {
     for (uint32_t i = 0; i < moveList.count; i++)
     {
-        printf("%d. %-2s\n", i, moveToString(moveList.moves[i].move));
+        printf("%3d. %-5s\n", i + 1, moveToString(moveList.moves[i].move));
     }
 }
 
 static inline void
 quietPawnMoves(const Board *board, MoveList *moveList, const Color c, const Bitboard empty) {
-    const Bitboard  pawns     = pieceBB(board, PAWN, c);
-    const Direction movingDir = c == WHITE ? SOUTH : NORTH;
+    const Bitboard  pawns  = pieceBB(board, PAWN, c);
+    const Direction offset = c == WHITE ? SOUTH : NORTH;
 
     Bitboard singlePush = singlePawnPush(pawns, empty, c);
     Bitboard doublePush = doublePawnPush(pawns, empty, c);
 
     while (singlePush)
     {
-        const Square to = popLsb(&singlePush);
-        addMove(buildMove(to - movingDir, to, QUIET), moveList);
+        const Square to         = popLsb(&singlePush);
+        const Rank   movingRank = rankOf(to);
+
+        if (movingRank != RANK_1 && movingRank != RANK_8)
+        {
+            addMove(buildMove(to - offset, to, QUIET), moveList);
+        }
+        else
+        {
+            addMove(buildMove(to - offset, to, KNIGHT_PROMO), moveList);
+            addMove(buildMove(to - offset, to, BISHOP_PROMO), moveList);
+            addMove(buildMove(to - offset, to, ROOK_PROMO), moveList);
+            addMove(buildMove(to - offset, to, QUEEN_PROMO), moveList);
+        }
     }
 
     while (doublePush)
     {
         const Square to = popLsb(&doublePush);
-        addMove(buildMove(to - movingDir * 2, to, DOUBLEPUSH), moveList);
+        addMove(buildMove(to - offset * 2, to, DOUBLEPUSH), moveList);
     }
 }
 
@@ -56,7 +68,20 @@ static inline void pawnCaptures(const Board *board, MoveList *moveList, const Co
 
         while (possiblePawnCaptures)
         {
-            addMove(buildMove(from, popLsb(&possiblePawnCaptures), CAPTURE), moveList);
+            const Square to         = popLsb(&possiblePawnCaptures);
+            const Rank   movingRank = rankOf(to);
+
+            if (movingRank != RANK_1 && movingRank != RANK_8)
+            {
+                addMove(buildMove(from, to, CAPTURE), moveList);
+            }
+            else
+            {
+                addMove(buildMove(from, to, KNIGHT_PROMO), moveList);
+                addMove(buildMove(from, to, BISHOP_PROMO), moveList);
+                addMove(buildMove(from, to, ROOK_PROMO), moveList);
+                addMove(buildMove(from, to, QUEEN_PROMO), moveList);
+            }
         }
     }
 
@@ -99,7 +124,8 @@ pieceCaptures(const Board *board, MoveList *moveList, const Color c, const Piece
     {
         const Square from = popLsb(&pieces);
         Bitboard     possiblePieceCaptures =
-            getAttacksByPieceType(pt, from, board->occupancies[COLOR_NB]) & board->occupancies[c ^ 1];
+            getAttacksByPieceType(pt, from, board->occupancies[COLOR_NB])
+            & board->occupancies[c ^ 1];
 
         while (possiblePieceCaptures)
         {
@@ -109,40 +135,34 @@ pieceCaptures(const Board *board, MoveList *moveList, const Color c, const Piece
 }
 
 inline void generateAllQuiets(const Board *board, MoveList *moveList, const Color c) {
+    quietPawnMoves(board, moveList, c, ~board->occupancies[COLOR_NB]);
 
-    if (bitCount(board->checkers) < 2)
+    for (PieceType pt = KNIGHT; pt <= KING; pt++)
     {
-        quietPawnMoves(board, moveList, c, ~board->occupancies[COLOR_NB]);
-
-        for (PieceType pt = KNIGHT; pt <= KING; pt++)
-        {
-            quietPieceMoves(board, moveList, c, pt, ~board->occupancies[COLOR_NB]);
-        }
-    }
-    else
-    {
-        quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
+        quietPieceMoves(board, moveList, c, pt, ~board->occupancies[COLOR_NB]);
     }
 }
 
 inline void generateAllCaptures(const Board *board, MoveList *moveList, const Color c) {
+    pawnCaptures(board, moveList, c);
 
-    if(bitCount(board->checkers < 2))
+    for (PieceType pt = KNIGHT; pt <= KING; pt++)
     {
-        pawnCaptures(board, moveList, c);
-
-        for (PieceType pt = KNIGHT; pt <= KING; pt++)
-        {
-            pieceCaptures(board, moveList, c, pt);
-        }
-    }
-    else
-    {
-        pieceCaptures(board, moveList, c, KING);
+        pieceCaptures(board, moveList, c, pt);
     }
 }
 
 inline void generateAllMoves(const Board *board, MoveList *moveList, const Color c) {
-    generateAllQuiets(board, moveList, c);
-    generateAllCaptures(board, moveList, c);
+    initializeMoveList(moveList);
+
+    if (bitCount(board->checkers > 1))
+    {
+        quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
+        pieceCaptures(board, moveList, c, KING);
+    }
+    else
+    {
+        generateAllQuiets(board, moveList, c);
+        generateAllCaptures(board, moveList, c);
+    }
 }
