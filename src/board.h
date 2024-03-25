@@ -23,7 +23,7 @@ constexpr SquareName squareToCoordinates[SQUARE_NB] = {
 
 constexpr char pieceToChar[PIECE_NB] = "PNBRQKpnbrqk";
 
-constexpr int charToPiece[] = {
+constexpr Piece charToPiece[] = {
     ['P'] = W_PAWN,   ['N'] = W_KNIGHT, ['B'] = W_BISHOP, ['R'] = W_ROOK,
     ['Q'] = W_QUEEN,  ['K'] = W_KING,   ['p'] = B_PAWN,   ['n'] = B_KNIGHT,
     ['b'] = B_BISHOP, ['r'] = B_ROOK,   ['q'] = B_QUEEN,  ['k'] = B_KING};
@@ -31,6 +31,8 @@ constexpr int charToPiece[] = {
 void initializeBoard(Board *board);
 void printBoard(Board board);
 void parseFen(const char *fen, Board *board);
+
+Piece pieceOnSquare(Board board, Square square);
 
 Bitboard pieceBB(const Board *board, PieceType pieceType, Color color);
 Bitboard attacksToKing(const Board *board, Square square, Color color);

@@ -107,7 +107,6 @@ void parseFen(const char *fen, Board *board) {
             board->castling |= BQ;
             break;
         default:
-            printf("Invalid castling rights!\n");
             break;
         }
         fen++;
@@ -131,6 +130,21 @@ void parseFen(const char *fen, Board *board) {
     board->occupancies[COLOR_NB] |= board->occupancies[BLACK];
 
     board->checkers |= attacksToKing(board, lsbIndex(pieceBB(board, KING, board->stm)), board->stm);
+}
+
+Piece pieceOnSquare(const Board board, const Square sq) {
+    Piece piece = NO_PIECE;
+
+    for (Piece currentPiece = W_PAWN; currentPiece < PIECE_NB; currentPiece++)
+    {
+        if (getBit(board.pieceBB[currentPiece], sq))
+        {
+            piece = currentPiece;
+            break;
+        }
+    }
+
+    return piece;
 }
 
 inline Bitboard pieceBB(const Board *board, const PieceType pt, const Color c) {
