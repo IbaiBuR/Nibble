@@ -133,27 +133,6 @@ void parseFen(const char *fen, Board *board) {
     board->checkers |= attacksToKing(board, lsbIndex(pieceBB(board, KING, board->stm)), board->stm);
 }
 
-// returns whether a square is attacked by a side
-// useful to validate if king is in check
-inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
-    if (pawnAttacks[c ^ 1][sq] & ((c == WHITE) ? board->pieceBB[B_PAWN] : board->pieceBB[W_PAWN]))
-        return true;
-    if (knightAttacks[sq] & ((c == WHITE) ? board->pieceBB[W_KNIGHT] : board->pieceBB[B_KNIGHT]))
-        return true;
-    if (kingAttacks[sq] & ((c == WHITE) ? board->pieceBB[W_KING] : board->pieceBB[B_KING]))
-        return true;
-    if (getBishopAttacks(sq, board->occupancies[COLOR_NB])
-        & ((c == WHITE) ? (board->pieceBB[W_QUEEN] | board->pieceBB[W_BISHOP])
-                        : (board->pieceBB[B_QUEEN] | board->pieceBB[B_BISHOP])))
-        return true;
-    if (getRookAttacks(sq, board->occupancies[COLOR_NB])
-        & ((c == WHITE) ? (board->pieceBB[W_QUEEN] | board->pieceBB[W_ROOK])
-                        : (board->pieceBB[B_QUEEN] | board->pieceBB[B_ROOK])))
-        return true;
-
-    return false;
-}
-
 inline Bitboard pieceBB(const Board *board, const PieceType pt, const Color c) {
     return board->pieceBB[pt + c * 6];
 }
