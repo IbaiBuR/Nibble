@@ -5,6 +5,7 @@
 #define INLINE static inline __attribute__((always_inline))
 
 constexpr int MAX_MOVES = 256;
+constexpr int MAX_PLY   = 200;
 
 typedef uint64_t Bitboard;
 typedef uint16_t Move;
@@ -99,14 +100,26 @@ typedef enum CastlingMask : int {
     BQ = 8, // 1000 black can castle queenside
 } CastlingMask;
 
+typedef struct BoardCopy {
+    Bitboard     pieceCopy[PIECE_NB];
+    Bitboard     occupancyCopy[COLOR_NB + 1];
+    Bitboard     checkers;
+    Color        stm;
+    Square       epSq;
+    CastlingMask castling;
+    int          fmr;
+    int          fullMoveNumber;
+} BoardCopy;
+
 typedef struct Board {
     Bitboard     pieceBB[PIECE_NB];         // bitboards for each piece type
     Bitboard     occupancies[COLOR_NB + 1]; // occupancies for white, black and both
     Bitboard     checkers;                  // bitboard for pieces that give check
-    Bitboard     pinned;                    // bitboard for pinned pieces
     Color        stm;                       // side to move
     Square       epSq;                      // en-passant square
     CastlingMask castling;                  // castling mask
+    BoardCopy    history[MAX_PLY];          // board history, for move unmaking
+    int          histPly;                   // keep track of the board history
     int          fmr;                       // halfmoves till fifty-move rule
     int          fullMoveNumber;            // number of fullmoves
 } Board;

@@ -31,6 +31,8 @@ constexpr Piece charToPiece[] = {
 void initializeBoard(Board *board);
 void printBoard(Board board);
 void parseFen(const char *fen, Board *board);
+void copyBoardState(Board *board);
+void restoreBoardState(Board *board);
 
 Piece pieceOnSquare(Board board, Square square);
 

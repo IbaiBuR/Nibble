@@ -10,11 +10,11 @@ void initializeBoard(Board *board) {
     memset(board->occupancies, 0ULL, sizeof(board->occupancies));
 
     board->checkers = 0ULL;
-    board->pinned   = 0ULL;
 
     board->stm            = WHITE;
     board->epSq           = NO_SQ;
     board->castling       = 0;
+    board->histPly        = 0;
     board->fmr            = 0;
     board->fullMoveNumber = 1;
 }
@@ -130,6 +130,32 @@ void parseFen(const char *fen, Board *board) {
     board->occupancies[COLOR_NB] |= board->occupancies[BLACK];
 
     board->checkers |= attacksToKing(board, lsbIndex(pieceBB(board, KING, board->stm)), board->stm);
+}
+
+void copyBoardState(Board *board) {
+    memcpy(&board->history[board->histPly].pieceCopy, &board->pieceBB, sizeof(board->pieceBB));
+    memcpy(&board->history[board->histPly].occupancyCopy, &board->occupancies,
+           sizeof(board->occupancies));
+
+    board->history[board->histPly].checkers       = board->checkers;
+    board->history[board->histPly].stm            = board->stm;
+    board->history[board->histPly].epSq           = board->epSq;
+    board->history[board->histPly].castling       = board->castling;
+    board->history[board->histPly].fmr            = board->fmr;
+    board->history[board->histPly].fullMoveNumber = board->fullMoveNumber;
+}
+
+void restoreBoardState(Board *board) {
+    memcpy(&board->pieceBB, &board->history[board->histPly].pieceCopy, sizeof(board->pieceBB));
+    memcpy(&board->occupancies, &board->history[board->histPly].occupancyCopy,
+           sizeof(board->occupancies));
+
+    board->checkers       = board->history[board->histPly].checkers;
+    board->stm            = board->history[board->histPly].stm;
+    board->epSq           = board->history[board->histPly].epSq;
+    board->castling       = board->history[board->histPly].castling;
+    board->fmr            = board->history[board->histPly].fmr;
+    board->fullMoveNumber = board->history[board->histPly].fullMoveNumber;
 }
 
 Piece pieceOnSquare(const Board board, const Square sq) {
