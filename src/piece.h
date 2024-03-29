@@ -20,6 +20,11 @@ constexpr PieceType promotionToPieceType[] = {
     [QUEEN_PROMO] = QUEEN,       [KNIGHT_CAPTURE_PROMO] = KNIGHT, [BISHOP_CATURE_PROMO] = BISHOP,
     [ROOK_CAPTURE_PROMO] = ROOK, [QUEEN_CAPTURE_PROMO] = QUEEN};
 
+constexpr PieceType pieceToPieceType[] = {
+    [W_PAWN] = PAWN,     [B_PAWN] = PAWN,     [W_KNIGHT] = KNIGHT, [B_KNIGHT] = KNIGHT,
+    [W_BISHOP] = BISHOP, [B_BISHOP] = BISHOP, [W_ROOK] = ROOK,     [B_ROOK] = ROOK,
+    [W_QUEEN] = QUEEN,   [B_QUEEN] = QUEEN,   [W_KING] = KING,     [B_KING] = KING};
+
 void removePiece(Board *board, Piece piece, Square square);
 void addPiece(Board *board, Piece piece, Square square);
 void movePiece(Board *board, Piece piece, Square from, Square to);
