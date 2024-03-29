@@ -2,6 +2,16 @@
 
 #include "bitboard.h"
 
+void removePiece(Board *board, const Piece piece, const Square sq) {
+    resetBit(board->pieceBB[piece], sq);
+    resetBit(board->occupancies[pieceColor[piece]], sq);
+}
+
+void addPiece(Board *board, const Piece piece, const Square sq) {
+    setBit(board->pieceBB[piece], sq);
+    setBit(board->occupancies[pieceColor[piece]], sq);
+}
+
 void movePiece(Board *board, const Piece piece, const Square from, const Square to) {
     resetBit(board->pieceBB[piece], from);
     resetBit(board->occupancies[pieceColor[piece]], from);

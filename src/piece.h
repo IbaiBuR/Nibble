@@ -15,9 +15,13 @@ constexpr Color pieceColor[] = {
     [W_BISHOP] = WHITE, [B_BISHOP] = BLACK, [W_ROOK] = WHITE,   [B_ROOK] = BLACK,
     [W_QUEEN] = WHITE,  [B_QUEEN] = BLACK,  [W_KING] = WHITE,   [B_KING] = BLACK};
 
-constexpr Piece promotionToPiece[] = {
-    [KNIGHT_PROMO] = KNIGHT, [BISHOP_PROMO] = BISHOP, [ROOK_PROMO] = ROOK, [QUEEN_PROMO] = QUEEN};
+constexpr PieceType promotionToPieceType[] = {
+    [KNIGHT_PROMO] = KNIGHT,     [BISHOP_PROMO] = BISHOP,         [ROOK_PROMO] = ROOK,
+    [QUEEN_PROMO] = QUEEN,       [KNIGHT_CAPTURE_PROMO] = KNIGHT, [BISHOP_CATURE_PROMO] = BISHOP,
+    [ROOK_CAPTURE_PROMO] = ROOK, [QUEEN_CAPTURE_PROMO] = QUEEN};
 
+void removePiece(Board *board, Piece piece, Square square);
+void addPiece(Board *board, Piece piece, Square square);
 void movePiece(Board *board, Piece piece, Square from, Square to);
 
 Piece pieceOnSquare(const Board *board, Square square);
