@@ -17,12 +17,22 @@ enum MoveFlags {
     KNIGHT_PROMO,
     BISHOP_PROMO,
     ROOK_PROMO,
-    QUEEN_PROMO
+    QUEEN_PROMO,
+    KNIGHT_CAPTURE_PROMO,
+    BISHOP_CATURE_PROMO,
+    ROOK_CAPTURE_PROMO,
+    QUEEN_CAPTURE_PROMO
 };
 
 constexpr char promoFlagToChar[] = {
-    [KNIGHT_PROMO] = 'n', [BISHOP_PROMO] = 'b', [ROOK_PROMO] = 'r', [QUEEN_PROMO] = 'q'};
+    [KNIGHT_PROMO] = 'n',       [BISHOP_PROMO] = 'b',         [ROOK_PROMO] = 'r',
+    [QUEEN_PROMO] = 'q',        [KNIGHT_CAPTURE_PROMO] = 'n', [BISHOP_CATURE_PROMO] = 'b',
+    [ROOK_CAPTURE_PROMO] = 'r', [QUEEN_CAPTURE_PROMO] = 'q'};
 
 bool isPromotion(Move move);
+bool isCapture(Move move);
+bool isEnPassant(Move move);
+
+void makeMove(Move move, Board *board);
 
 char *moveToString(Move move);
