@@ -162,19 +162,15 @@ void restoreBoardState(Board *board) {
 // returns whether a square is attacked by a side
 // useful to validate if king is in check
 inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
-    if (pawnAttacks[c ^ 1][sq] & ((c == WHITE) ? board->pieceBB[B_PAWN] : board->pieceBB[W_PAWN]))
+    const Bitboard occupancies = board->occupancies[COLOR_NB];
+
+    if (pawnAttacks[c ^ 1][sq] & pieceBB(board, PAWN, c))
         return true;
-    if (knightAttacks[sq] & ((c == WHITE) ? board->pieceBB[W_KNIGHT] : board->pieceBB[B_KNIGHT]))
+    if (knightAttacks[sq] & pieceBB(board, KNIGHT, c))
         return true;
-    if (kingAttacks[sq] & ((c == WHITE) ? board->pieceBB[W_KING] : board->pieceBB[B_KING]))
+    if (getBishopAttacks(sq, occupancies) & (pieceBB(board, BISHOP, c) | pieceBB(board, QUEEN, c)))
         return true;
-    if (getBishopAttacks(sq, board->occupancies[COLOR_NB])
-        & ((c == WHITE) ? (board->pieceBB[W_QUEEN] | board->pieceBB[W_BISHOP])
-                        : (board->pieceBB[B_QUEEN] | board->pieceBB[B_BISHOP])))
-        return true;
-    if (getRookAttacks(sq, board->occupancies[COLOR_NB])
-        & ((c == WHITE) ? (board->pieceBB[W_QUEEN] | board->pieceBB[W_ROOK])
-                        : (board->pieceBB[B_QUEEN] | board->pieceBB[B_ROOK])))
+    if (getRookAttacks(sq, occupancies) & (pieceBB(board, ROOK, c) | pieceBB(board, QUEEN, c)))
         return true;
 
     return false;

@@ -50,5 +50,6 @@ bool isDoublePush(Move move);
 bool isCastling(Move move);
 
 void makeMove(Move move, Board *board);
+void undoMove(Board *board);
 
 char *moveToString(Move move);

@@ -78,6 +78,14 @@ inline void makeMove(const Move move, Board *board) {
 
     board->stm ^= 1;
     board->checkers = attacksToKing(board, lsbIndex(pieceBB(board, KING, board->stm)), board->stm);
+
+    board->occupancies[COLOR_NB] |= board->occupancies[WHITE];
+    board->occupancies[COLOR_NB] |= board->occupancies[BLACK];
+}
+
+void undoMove(Board *board) {
+    board->histPly--;
+    restoreBoardState(board);
 }
 
 char *moveToString(const Move move) {
