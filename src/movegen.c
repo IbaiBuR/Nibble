@@ -175,7 +175,7 @@ inline void generateAllCaptures(const Board *board, MoveList *moveList, const Co
 inline void generateAllMoves(const Board *board, MoveList *moveList, const Color c) {
     initializeMoveList(moveList);
 
-    if (bitCount(board->checkers > 1))
+    if (bitCount(board->checkers) > 1)
     {
         quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
         pieceCaptures(board, moveList, c, KING);
