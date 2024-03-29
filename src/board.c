@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "bitboard.h"
+#include "piece.h"
 
 void initializeBoard(Board *board) {
     memset(board->pieceBB, 0ULL, sizeof(board->pieceBB));
@@ -156,28 +157,6 @@ void restoreBoardState(Board *board) {
     board->castling       = board->history[board->histPly].castling;
     board->fmr            = board->history[board->histPly].fmr;
     board->fullMoveNumber = board->history[board->histPly].fullMoveNumber;
-}
-
-void movePiece(Board *board, const Piece piece, const Square from, const Square to) {
-    resetBit(board->pieceBB[piece], from);
-    resetBit(board->occupancies[pieceColor[piece]], from);
-    setBit(board->pieceBB[piece], to);
-    setBit(board->occupancies[pieceColor[piece]], to);
-}
-
-Piece pieceOnSquare(const Board *board, const Square sq) {
-    Piece piece = NO_PIECE;
-
-    for (Piece currentPiece = W_PAWN; currentPiece < PIECE_NB; currentPiece++)
-    {
-        if (getBit(board->pieceBB[currentPiece], sq))
-        {
-            piece = currentPiece;
-            break;
-        }
-    }
-
-    return piece;
 }
 
 inline Bitboard pieceBB(const Board *board, const PieceType pt, const Color c) {
