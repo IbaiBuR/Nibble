@@ -29,9 +29,25 @@ constexpr char promoFlagToChar[] = {
     [QUEEN_PROMO] = 'q',        [KNIGHT_CAPTURE_PROMO] = 'n', [BISHOP_CATURE_PROMO] = 'b',
     [ROOK_CAPTURE_PROMO] = 'r', [QUEEN_CAPTURE_PROMO] = 'q'};
 
+// clang-format off
+// Castling rights update constants
+constexpr int castlingRights[SQUARE_NB] = {
+    7, 15, 15, 15,  3, 15, 15, 11,
+   15, 15, 15, 15, 15, 15, 15, 15,
+   15, 15, 15, 15, 15, 15, 15, 15,
+   15, 15, 15, 15, 15, 15, 15, 15,
+   15, 15, 15, 15, 15, 15, 15, 15,
+   15, 15, 15, 15, 15, 15, 15, 15,
+   15, 15, 15, 15, 15, 15, 15, 15,
+   13, 15, 15, 15, 12, 15, 15, 14
+};
+// clang-format on
+
 bool isPromotion(Move move);
 bool isCapture(Move move);
 bool isEnPassant(Move move);
+bool isDoublePush(Move move);
+bool isCastling(Move move);
 
 void makeMove(Move move, Board *board);
 
