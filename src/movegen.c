@@ -77,10 +77,10 @@ static inline void pawnCaptures(const Board *board, MoveList *moveList, const Co
             }
             else
             {
-                addMove(buildMove(from, to, KNIGHT_PROMO), moveList);
-                addMove(buildMove(from, to, BISHOP_PROMO), moveList);
-                addMove(buildMove(from, to, ROOK_PROMO), moveList);
-                addMove(buildMove(from, to, QUEEN_PROMO), moveList);
+                addMove(buildMove(from, to, KNIGHT_CAPTURE_PROMO), moveList);
+                addMove(buildMove(from, to, BISHOP_CATURE_PROMO), moveList);
+                addMove(buildMove(from, to, ROOK_CAPTURE_PROMO), moveList);
+                addMove(buildMove(from, to, QUEEN_CAPTURE_PROMO), moveList);
             }
         }
     }
