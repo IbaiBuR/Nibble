@@ -2,7 +2,7 @@ CC = gcc
 CW = x86_64-w64-mingw32-gcc
 SRCS = *.c
 HEADERS = *.h
-FLAGS = -oFast -std=c2x -march=native -Wall -Wextra
+FLAGS = -Ofast -std=c2x -march=native -Wall -Wextra
 EXE = nibble
 
 .PHONY: all format clean
