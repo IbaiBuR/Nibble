@@ -169,16 +169,22 @@ inline void generateAllCaptures(const Board *board, MoveList *moveList, const Co
 inline void generateAllMoves(const Board *board, MoveList *moveList, const Color c) {
     moveList->count = 0;
 
-    if (bitCount(board->checkers) > 1)
-    {
-        quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
-        pieceCaptures(board, moveList, c, KING);
-    }
-    else
+    if (bitCount(board->checkers) == 0)
     {
         generatePawnPushes(board, moveList, c, ~board->occupancies[COLOR_NB]);
         generateAllQuiets(board, moveList, c);
         generateAllCaptures(board, moveList, c);
         generateCastlingMoves(board, moveList, c);
+    }
+    else if (bitCount(board->checkers) == 1)
+    {
+        generatePawnPushes(board, moveList, c, ~board->occupancies[COLOR_NB]);
+        generateAllQuiets(board, moveList, c);
+        generateAllCaptures(board, moveList, c);
+    }
+    else
+    {
+        quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
+        pieceCaptures(board, moveList, c, KING);
     }
 }
