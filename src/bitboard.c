@@ -71,13 +71,13 @@ Bitboard genKingAttacks(const Square sq) {
 
     // king can move 1 square in all directions
     attacks |= shiftN(bb);
-    attacks |= shiftS(bb);
-    attacks |= shiftE(bb);
-    attacks |= shiftW(bb);
     attacks |= shiftNE(bb);
-    attacks |= shiftNW(bb);
+    attacks |= shiftE(bb);
     attacks |= shiftSE(bb);
+    attacks |= shiftS(bb);
     attacks |= shiftSW(bb);
+    attacks |= shiftW(bb);
+    attacks |= shiftNW(bb);
 
     return attacks;
 }

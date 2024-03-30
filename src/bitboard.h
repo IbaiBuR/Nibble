@@ -96,8 +96,8 @@ static inline Square popLsb(Bitboard *bb) {
 static inline Bitboard bitOf(const Square sq) { return 1ULL << sq; }
 static inline Bitboard shiftN(const Bitboard bb) { return bb >> 8; }
 static inline Bitboard shiftS(const Bitboard bb) { return bb << 8; }
-static inline Bitboard shiftW(const Bitboard bb) { return bb >> 1; }
-static inline Bitboard shiftE(const Bitboard bb) { return bb << 1; }
+static inline Bitboard shiftW(const Bitboard bb) { return (bb >> 1) & NOT_H_FILE; }
+static inline Bitboard shiftE(const Bitboard bb) { return (bb << 1) & NOT_A_FILE; }
 static inline Bitboard shiftNW(const Bitboard bb) { return (bb >> 7) & NOT_A_FILE; }
 static inline Bitboard shiftNE(const Bitboard bb) { return (bb >> 9) & NOT_H_FILE; }
 static inline Bitboard shiftSW(const Bitboard bb) { return (bb << 7) & NOT_H_FILE; }
