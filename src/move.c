@@ -76,11 +76,10 @@ inline int makeMove(const Move move, Board *board) {
         board->fullMoveNumber++;
     }
 
+    board->occupancies[COLOR_NB] = board->occupancies[WHITE] | board->occupancies[BLACK];
+
     board->stm ^= 1;
     board->checkers = attacksToKing(board, lsbIndex(pieceBB(board, KING, board->stm)), board->stm);
-
-    board->occupancies[COLOR_NB] |= board->occupancies[WHITE];
-    board->occupancies[COLOR_NB] |= board->occupancies[BLACK];
 
     if (attackedBySide(board, lsbIndex(pieceBB(board, KING, board->stm ^ 1)), board->stm))
     {
