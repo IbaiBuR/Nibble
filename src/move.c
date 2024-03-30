@@ -16,7 +16,7 @@ bool isEnPassant(const Move move) { return flag(move) == ENPASSANT; }
 bool isDoublePush(const Move move) { return flag(move) == DOUBLEPUSH; }
 bool isCastling(const Move move) { return flag(move) == CASTLE; }
 
-inline void makeMove(const Move move, Board *board) {
+inline int makeMove(const Move move, Board *board) {
     copyBoardState(board);
 
     board->histPly++;
@@ -81,6 +81,14 @@ inline void makeMove(const Move move, Board *board) {
 
     board->occupancies[COLOR_NB] |= board->occupancies[WHITE];
     board->occupancies[COLOR_NB] |= board->occupancies[BLACK];
+
+    if (attackedBySide(board, lsbIndex(pieceBB(board, KING, board->stm ^ 1)), board->stm))
+    {
+        undoMove(board);
+        return 0;
+    }
+
+    return 1;
 }
 
 void undoMove(Board *board) {
