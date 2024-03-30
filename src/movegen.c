@@ -133,19 +133,29 @@ static inline void generateCastlingMoves(const Board *board, MoveList *moveList,
 
     if (c == WHITE)
     {
-        if (board->castling & WK && !getBit(occupied, G1) && !getBit(occupied, F1))
+        if (board->castling & WK && !getBit(occupied, G1) && !getBit(occupied, F1)
+            && !attackedBySide(board, F1, BLACK))
+        {
             addMove(buildMove(E1, G1, CASTLE), moveList);
+        }
         if (board->castling & WQ && !getBit(occupied, D1) && !getBit(occupied, C1)
-            && !getBit(occupied, B1))
+            && !getBit(occupied, B1) && !attackedBySide(board, D1, BLACK))
+        {
             addMove(buildMove(E1, C1, CASTLE), moveList);
+        }
     }
     else
     {
-        if (board->castling & BK && !getBit(occupied, G8) && !getBit(occupied, F8))
+        if (board->castling & BK && !getBit(occupied, G8) && !getBit(occupied, F8)
+            && !attackedBySide(board, F8, WHITE))
+        {
             addMove(buildMove(E8, G8, CASTLE), moveList);
+        }
         if (board->castling & BQ && !getBit(occupied, D8) && !getBit(occupied, C8)
-            && !getBit(occupied, B8))
+            && !getBit(occupied, B8) && !attackedBySide(board, D8, WHITE))
+        {
             addMove(buildMove(E8, C8, CASTLE), moveList);
+        }
     }
 }
 
