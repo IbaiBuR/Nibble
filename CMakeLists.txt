@@ -17,4 +17,6 @@ add_executable(Nibble src/nibble.c
         src/move.h
         src/piece.c
         src/piece.h
+        src/perft.c
+        src/perft.h
 )

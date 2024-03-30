@@ -14,5 +14,8 @@ all:
 format:
 	clang-format -i $(SRCS) $(HEADERS) -style=file
 
+debug:
+	$(CC) -g -std=c2x $(SRCS) -o $(EXE)
+
 clean:
 	rm -f nibble nibble.exe
