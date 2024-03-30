@@ -189,6 +189,6 @@ Bitboard attacksToKing(const Board *board, const Square kingSq, const Color c) {
     const Bitboard rooksQueens   = pieceBB(board, ROOK, c ^ 1) | pieceBB(board, QUEEN, c ^ 1);
 
     return (pawnAttacks[c][kingSq] & oppPawns) | (knightAttacks[kingSq] & oppKnights)
-         | (getBishopAttacks(kingSq, board->occupancies[c]) & bishopsQueens)
-         | (getRookAttacks(kingSq, board->occupancies[c]) & rooksQueens);
+         | (getBishopAttacks(kingSq, board->occupancies[COLOR_NB]) & bishopsQueens)
+         | (getRookAttacks(kingSq, board->occupancies[COLOR_NB]) & rooksQueens);
 }
