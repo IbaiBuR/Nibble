@@ -31,7 +31,7 @@ uint64_t randU64() {
     return n1 | (n2 << 16) | (n3 << 32) | (n4 << 48);
 }
 
-uint64_t getTimeMS() {
+long getTimeMS() {
 #ifdef WIN64
     return GetTickCount();
 #else

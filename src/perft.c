@@ -1,5 +1,6 @@
 #include "perft.h"
 
+#include <math.h>
 #include <stdio.h>
 
 #include "bitboard.h"
@@ -36,9 +37,11 @@ uint64_t perftTest(const int depth, Board *board) {
     nodes = 0ULL;
     MoveList moveList;
 
+    printf("\n Running performance test...\n\n");
+
     generateAllMoves(board, &moveList, board->stm);
 
-    const uint64_t start = getTimeMS();
+    const long startTime = getTimeMS();
 
     for (uint32_t i = 0; i < moveList.count; i++)
     {
@@ -55,13 +58,16 @@ uint64_t perftTest(const int depth, Board *board) {
 
         const uint64_t old = nodes - cumulatedNodes;
 
-        printf(" %s: %ld\n", moveToString(currentMove), old);
+        printf(" %s: %" PRIu64 "\n", moveToString(currentMove), old);
     }
+
+    const long endTime = getTimeMS();
 
     printf("\n");
     printf(" Depth: %d\n", depth);
-    printf(" Nodes: %ld\n", nodes);
-    printf(" Time : %ld\n\n", getTimeMS() - start);
+    printf(" Nodes: %" PRIu64 "\n", nodes);
+    printf(" Time : %ldms\n", endTime - startTime);
+    printf(" NPS  : %" PRIu64 "\n\n", nodes / MAX(1, (endTime - startTime)) * 1000);
 
     return nodes;
 }
