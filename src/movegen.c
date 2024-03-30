@@ -12,12 +12,6 @@ INLINE void addMove(const Move move, MoveList *moveList) {
     moveList->count++;
 }
 
-void initializeMoveList(MoveList *moveList) {
-    moveList->count        = 0;
-    moveList->moves->move  = NOMOVE;
-    moveList->moves->score = 0;
-}
-
 void printMoveList(const MoveList moveList) {
     for (uint32_t i = 0; i < moveList.count; i++)
     {
@@ -173,7 +167,7 @@ inline void generateAllCaptures(const Board *board, MoveList *moveList, const Co
 }
 
 inline void generateAllMoves(const Board *board, MoveList *moveList, const Color c) {
-    initializeMoveList(moveList);
+    moveList->count = 0;
 
     if (bitCount(board->checkers) > 1)
     {
