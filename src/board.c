@@ -168,6 +168,8 @@ inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
         return true;
     if (knightAttacks[sq] & pieceBB(board, KNIGHT, c))
         return true;
+    if (kingAttacks[sq] & pieceBB(board, KING, c))
+        return true;
     if (getBishopAttacks(sq, occupancies) & (pieceBB(board, BISHOP, c) | pieceBB(board, QUEEN, c)))
         return true;
     if (getRookAttacks(sq, occupancies) & (pieceBB(board, ROOK, c) | pieceBB(board, QUEEN, c)))
