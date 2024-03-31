@@ -1,9 +1,11 @@
 #include "move.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #include "bitboard.h"
 #include "board.h"
+#include "movegen.h"
 #include "piece.h"
 
 bool isPromotion(const Move move) { return flag(move) >= KNIGHT_PROMO; }
@@ -109,4 +111,20 @@ char *moveToString(const Move move) {
     }
 
     return buffer;
+}
+
+Move parseMove(const char *move, const Board *board) {
+    MoveList moveList;
+    generateAllMoves(board, &moveList, board->stm);
+
+    for (uint32_t i = 0; i < moveList.count; i++)
+    {
+        const Move currentMove = moveList.moves[i].move;
+
+        if (strcmp(move, moveToString(currentMove)) == 0)
+            return currentMove;
+    }
+
+    printf(" Illegal move.\n");
+    return NOMOVE;
 }

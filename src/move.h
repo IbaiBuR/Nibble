@@ -53,3 +53,5 @@ int  makeMove(Move move, Board *board);
 void undoMove(Board *board);
 
 char *moveToString(Move move);
+
+Move parseMove(const char *move, const Board *board);
