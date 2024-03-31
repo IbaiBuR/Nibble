@@ -44,9 +44,7 @@ inline int makeMove(const Move move, Board *board) {
     board->epSq = NO_SQ;
 
     if (isDoublePush(move))
-    {
         board->epSq = to - offset;
-    }
 
     if (isCastling(move))
     {
@@ -74,9 +72,10 @@ inline int makeMove(const Move move, Board *board) {
     board->castling &= castlingRights[to];
 
     if (board->stm == BLACK)
-    {
         board->fullMoveNumber++;
-    }
+
+    if (pieceToPieceType[movingPiece] == PAWN)
+        board->fmr = 0;
 
     board->occupancies[COLOR_NB] = board->occupancies[WHITE] | board->occupancies[BLACK];
 
