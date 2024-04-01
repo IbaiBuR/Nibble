@@ -1,6 +1,5 @@
 #include "perft.h"
 
-#include <math.h>
 #include <stdio.h>
 
 #include "bitboard.h"
