@@ -120,7 +120,7 @@ Move parseMove(const char *move, const Board *board) {
     {
         const Move currentMove = moveList.moves[i].move;
 
-        if (strcmp(move, moveToString(currentMove)) == 0)
+        if (strncmp(move, moveToString(currentMove), isPromotion(currentMove) ? 5 : 4) == 0)
             return currentMove;
     }
 
