@@ -2,7 +2,8 @@
 
 #include <inttypes.h>
 
-#define INLINE static inline __attribute__((always_inline))
+#define INLINE  static inline __attribute__((always_inline))
+#define VERSION "0.1"
 
 constexpr int MAX_MOVES = 256;
 constexpr int MAX_PLY   = 200;
