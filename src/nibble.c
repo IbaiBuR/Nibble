@@ -1,10 +1,8 @@
-#include <stdio.h>
-
 #include "bitboard.h"
-#include "board.h"
-#include "types.h"
+#include "uci.h"
 
 int main() {
     initBB();
+    uciLoop();
     return 0;
 }

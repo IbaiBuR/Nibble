@@ -1,5 +1,7 @@
 #include "uci.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "board.h"
@@ -42,5 +44,54 @@ void parsePosition(const char *command, Board *board) {
             break;
 
         makeMove(parsedMove, board);
+    }
+}
+
+void parseGo(const char *command, Board *board) {
+    command += 3;
+    const char *current = command;
+    int         depth   = -1;
+
+    if ((current = strstr(command, "depth")))
+    {
+        depth = atoi(current + 6);
+    }
+}
+
+void uciLoop() {
+    Board board;
+    parseFen(startPosFen, &board);
+
+    setbuf(stdin, nullptr);
+    setbuf(stdout, nullptr);
+
+    while (true)
+    {
+        char inputBuffer[4096] = {};
+        fflush(stdout);
+
+        if (fgets(inputBuffer, sizeof(inputBuffer), stdin) == nullptr || inputBuffer[0] == '\n')
+            continue;
+
+        if (strncmp(inputBuffer, "isready", 7) == 0)
+            printf("readyok\n");
+        else if (strncmp(inputBuffer, "position", 8) == 0)
+            parsePosition(inputBuffer, &board);
+        else if (strncmp(inputBuffer, "ucinewgame", 10) == 0)
+            parsePosition("position startpos", &board);
+        else if (strncmp(inputBuffer, "uci", 3) == 0)
+        {
+            printf("id name   Nibble %s\n", VERSION);
+            printf("id author Ibai Burgos\n");
+            printf("uciok\n");
+        }
+        else if (strncmp(inputBuffer, "go", 2) == 0)
+            parseGo(inputBuffer, &board);
+        else if (strncmp(inputBuffer, "board", 5) == 0)
+            printBoard(board);
+        else if (strncmp(inputBuffer, "quit", 4) == 0)
+            break;
+        else
+            printf("Unknown command: %s\n", inputBuffer);
     }
 }
