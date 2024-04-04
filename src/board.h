@@ -26,6 +26,8 @@ void initializeBoard(Board *board);
 void printBoard(Board board);
 void parseFen(const char *fen, Board *board);
 
+char *boardToFen(char *fenBuffer, const Board *board);
+
 void copyBoardState(Board *board);
 void restoreBoardState(Board *board);
 

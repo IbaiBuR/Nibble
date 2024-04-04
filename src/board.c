@@ -49,8 +49,12 @@ void printBoard(const Board board) {
            (board.castling & BK) ? 'k' : '-',
            (board.castling & BQ) ? 'q' : '-');
     // clang-format on
+
+    char fenBuffer[128] = {};
+
     printf(" FiftyMoveRule  : %d\n", board.fmr);
-    printf(" Move number    : %d\n\n", board.fullMoveNumber);
+    printf(" Move number    : %d\n", board.fullMoveNumber);
+    printf(" FEN            : %s\n\n", boardToFen(fenBuffer, &board));
 }
 
 void parseFen(const char *fen, Board *board) {
@@ -131,6 +135,58 @@ void parseFen(const char *fen, Board *board) {
     board->occupancies[COLOR_NB] |= board->occupancies[BLACK];
 
     board->checkers |= attacksToKing(board, lsbIndex(pieceBB(board, KING, board->stm)), board->stm);
+}
+
+char *boardToFen(char *fenBuffer, const Board *board) {
+    char *reference = fenBuffer;
+
+    for (Rank rank = RANK_1; rank < RANK_NB; rank++)
+    {
+        unsigned emptySquares = 0;
+
+        for (File file = A_FILE; file < FILE_NB; file++)
+        {
+            const Square sq    = squareOf(file, rank);
+            const Piece  piece = pieceOnSquare(board, sq);
+
+            if (piece != NO_PIECE)
+            {
+                if (emptySquares)
+                    *fenBuffer++ = '0' + emptySquares;
+                *fenBuffer++ = pieceToChar[piece];
+                emptySquares = 0;
+            }
+            else
+                emptySquares++;
+        }
+
+        if (emptySquares)
+            *fenBuffer++ = '0' + emptySquares;
+
+        *fenBuffer++ = rank == RANK_8 ? ' ' : '/';
+    }
+
+    *fenBuffer++ = board->stm == WHITE ? 'w' : 'b';
+    *fenBuffer++ = ' ';
+
+    if (board->castling)
+    {
+        if (board->castling & WK)
+            *fenBuffer++ = 'K';
+        if (board->castling & WQ)
+            *fenBuffer++ = 'Q';
+        if (board->castling & BK)
+            *fenBuffer++ = 'k';
+        if (board->castling & BQ)
+            *fenBuffer++ = 'q';
+    }
+    else
+        *fenBuffer++ = '-';
+
+    sprintf(fenBuffer, " %s %d %d", board->epSq != NO_SQ ? squareToCoordinates[board->epSq] : "-",
+            board->fmr, board->fullMoveNumber);
+
+    return reference;
 }
 
 void copyBoardState(Board *board) {
