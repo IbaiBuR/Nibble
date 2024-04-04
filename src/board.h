@@ -22,6 +22,11 @@ constexpr SquareName squareToCoordinates[SQUARE_NB] = {
 };
 // clang-format on
 
+constexpr castlingRightsStr castlingRightsToString[16] = {
+    [0] = "-",   [1] = "K",    [2] = "Q",    [3] = "KQ",   [4] = "k",   [5] = "Kk",
+    [6] = "Qk",  [7] = "KQk",  [8] = "q",    [9] = "Kq",   [10] = "Qq", [11] = "KQq",
+    [12] = "kq", [13] = "Kkq", [14] = "Qkq", [15] = "KQkq"};
+
 void initializeBoard(Board *board);
 void printBoard(Board board);
 void parseFen(const char *fen, Board *board);

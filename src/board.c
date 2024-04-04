@@ -166,25 +166,10 @@ char *boardToFen(char *fenBuffer, const Board *board) {
         *fenBuffer++ = rank == RANK_8 ? ' ' : '/';
     }
 
-    *fenBuffer++ = board->stm == WHITE ? 'w' : 'b';
-    *fenBuffer++ = ' ';
-
-    if (board->castling)
-    {
-        if (board->castling & WK)
-            *fenBuffer++ = 'K';
-        if (board->castling & WQ)
-            *fenBuffer++ = 'Q';
-        if (board->castling & BK)
-            *fenBuffer++ = 'k';
-        if (board->castling & BQ)
-            *fenBuffer++ = 'q';
-    }
-    else
-        *fenBuffer++ = '-';
-
-    sprintf(fenBuffer, " %s %d %d", board->epSq != NO_SQ ? squareToCoordinates[board->epSq] : "-",
-            board->fmr, board->fullMoveNumber);
+    sprintf(fenBuffer, "%s %s %s %d %d", board->stm ? "b" : "w",
+            castlingRightsToString[board->castling],
+            board->epSq != NO_SQ ? squareToCoordinates[board->epSq] : "-", board->fmr,
+            board->fullMoveNumber);
 
     return reference;
 }
