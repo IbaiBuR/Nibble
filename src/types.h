@@ -75,7 +75,8 @@ typedef enum PieceType : int {
     BISHOP,
     ROOK,
     QUEEN,
-    KING
+    KING,
+    PIECETYPE_NB
 } PieceType;
 
 typedef enum Piece : int {
