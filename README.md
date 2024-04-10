@@ -13,6 +13,7 @@ Nibble is a work-in-progress UCI compliant chess engine written in [C23](https:/
 
 ## Special thanks to
 
+- [Chess Programming Wiki](https://www.chessprogramming.org/Main_Page): For all the detailed chess programming material
 - [Code Monkey King](https://github.com/maksimKorzh): For his YouTube series regarding chess programming
 - [Microsoft Designer](https://designer.microsoft.com/): For the AI-generated logo
 - [Stockfish Discord](https://discord.gg/GWDRS3kU6R): For all the explanations and help regarding bugs, optimizations,
