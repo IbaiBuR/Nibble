@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "board.h"
+#include "eval.h"
 #include "move.h"
 #include "perft.h"
 #include "search.h"
@@ -95,6 +96,8 @@ void uciLoop() {
             parseGo(inputBuffer, &board);
         else if (strncmp(inputBuffer, "board", 5) == 0)
             printBoard(board);
+        else if (strncmp(inputBuffer, "eval", 4) == 0)
+            printf("Static eval: %d\n", evaluate(&board));
         else if (strncmp(inputBuffer, "quit", 4) == 0)
             break;
         else
