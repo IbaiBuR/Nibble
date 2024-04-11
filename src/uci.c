@@ -7,6 +7,7 @@
 #include "board.h"
 #include "move.h"
 #include "perft.h"
+#include "search.h"
 
 void parsePosition(const char *command, Board *board) {
     command += 9;
@@ -50,10 +51,17 @@ void parsePosition(const char *command, Board *board) {
 
 void parseGo(const char *command, Board *board) {
     command += 3;
+    int         depth = -1;
     const char *current;
 
     if ((current = strstr(command, "perft")))
         perftTest(atoi(current + 6), board);
+    else if ((current = strstr(command, "depth")))
+        depth = atoi(current + 6);
+    else
+        depth = 5;
+
+    search(board, depth);
 }
 
 void uciLoop() {

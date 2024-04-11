@@ -136,3 +136,8 @@ typedef struct MoveList {
     uint32_t   count;
     ScoredMove moves[MAX_MOVES];
 } MoveList;
+
+typedef struct SearchInfo {
+    Move     bestMove;
+    uint64_t nodes;
+} SearchInfo;
