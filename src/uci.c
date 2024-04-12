@@ -88,7 +88,7 @@ void uciLoop() {
             parsePosition("position startpos", &board);
         else if (strncmp(inputBuffer, "uci", 3) == 0)
         {
-            printf("id name   Nibble %s\n", VERSION);
+            printf("id name Nibble %s\n", VERSION);
             printf("id author Ibai Burgos\n");
             printf("uciok\n");
         }

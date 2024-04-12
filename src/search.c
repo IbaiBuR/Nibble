@@ -113,6 +113,9 @@ void search(Board *board, const int depth) {
     searchInfo.bestMove = NOMOVE;
     const Score score   = negamax(board, -SCORE_INFINITE, SCORE_INFINITE, depth, 0, &searchInfo);
 
-    printf("bestmove %s score %d nodes %ld\n", moveToString(searchInfo.bestMove), score,
-           searchInfo.nodes);
+    if (searchInfo.bestMove != NOMOVE)
+    {
+        printf("info score cp %d depth %d nodes %ld\n", score, depth, searchInfo.nodes);
+        printf("bestmove %s\n", moveToString(searchInfo.bestMove));
+    }
 }
