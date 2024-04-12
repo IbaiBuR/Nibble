@@ -1,5 +1,6 @@
 #include "board.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -66,13 +67,13 @@ void parseFen(const char *fen, Board *board) {
         {
             const Square sq = squareOf(file, rank);
 
-            if ((*fen >= 'a' && *fen <= 'z') || (*fen >= 'A' && *fen <= 'Z'))
+            if (isalpha(*fen))
             {
                 const Piece currentPiece = charToPiece[(int)*fen];
                 setBit(board->pieceBB[currentPiece], sq);
                 fen++;
             }
-            if (*fen >= '0' && *fen <= '9')
+            if (isdigit(*fen))
             {
                 Piece currentPiece = NO_PIECE;
 
