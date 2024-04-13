@@ -52,15 +52,18 @@ void parsePosition(const char *command, Board *board) {
 
 void parseGo(const char *command, Board *board) {
     command += 3;
-    int         depth = -1;
+    int         depth;
     const char *current;
 
     if ((current = strstr(command, "perft")))
+    {
         perftTest(atoi(current + 6), board);
-    else if ((current = strstr(command, "depth")))
+        return;
+    }
+    if ((current = strstr(command, "depth")))
         depth = atoi(current + 6);
     else
-        depth = 5;
+        depth = 4;
 
     search(board, depth);
 }
