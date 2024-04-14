@@ -15,7 +15,8 @@ INLINE void addMove(const Move move, MoveList *moveList) {
 void printMoveList(const MoveList moveList) {
     for (uint32_t i = 0; i < moveList.count; i++)
     {
-        printf("%3d. %-5s\n", i + 1, moveToString(moveList.moves[i].move));
+        printf("%3d. Move: %-5s Score: %-4d\n", i + 1, moveToString(moveList.moves[i].move),
+               moveList.moves[i].score);
     }
 }
 
@@ -181,16 +182,16 @@ inline void generateAllMoves(const Board *board, MoveList *moveList, const Color
 
     if (bitCount(board->checkers) == 0)
     {
+        generateAllCaptures(board, moveList, c);
         generatePawnPushes(board, moveList, c, ~board->occupancies[COLOR_NB]);
         generateAllQuiets(board, moveList, c);
-        generateAllCaptures(board, moveList, c);
         generateCastlingMoves(board, moveList, c);
     }
     else if (bitCount(board->checkers) == 1)
     {
+        generateAllCaptures(board, moveList, c);
         generatePawnPushes(board, moveList, c, ~board->occupancies[COLOR_NB]);
         generateAllQuiets(board, moveList, c);
-        generateAllCaptures(board, moveList, c);
     }
     else
     {
