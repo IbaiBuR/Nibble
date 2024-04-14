@@ -195,7 +195,7 @@ inline void generateAllMoves(const Board *board, MoveList *moveList, const Color
     }
     else
     {
-        quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
         pieceCaptures(board, moveList, c, KING);
+        quietPieceMoves(board, moveList, c, KING, ~board->occupancies[COLOR_NB]);
     }
 }
