@@ -53,5 +53,7 @@ int  makeMove(Move move, Board *board);
 void undoMove(Board *board);
 
 char *moveToString(Move move);
+Move  parseMove(const char *move, const Board *board);
 
-Move parseMove(const char *move, const Board *board);
+Score scoreMove(const Board *board, Move move);
+void  scoreAllMoves(const Board *board, MoveList *moveList);

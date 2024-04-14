@@ -6,6 +6,7 @@
 #include "bitboard.h"
 #include "board.h"
 #include "movegen.h"
+#include "movesort.h"
 #include "piece.h"
 
 bool isPromotion(const Move move) { return flag(move) >= KNIGHT_PROMO; }
@@ -126,4 +127,15 @@ Move parseMove(const char *move, const Board *board) {
 
     printf(" Illegal move.\n");
     return NOMOVE;
+}
+
+Score scoreMove(const Board *board, const Move move) {
+    return isCapture(move)
+             ? MVV_LVA[pieceOnSquare(board, from(move))][pieceOnSquare(board, to(move))]
+             : 0;
+}
+
+void scoreAllMoves(const Board *board, MoveList *moveList) {
+    for (int i = 0; i < moveList->count; i++)
+        moveList->moves[i].score = scoreMove(board, moveList->moves[i].move);
 }
