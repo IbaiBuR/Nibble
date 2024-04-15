@@ -43,6 +43,10 @@ constexpr int castlingRights[SQUARE_NB] = {
 };
 // clang-format on
 
+constexpr Score MVV_LVA_ScoreBonus    = 10000;
+constexpr Score firstKillerMoveScore  = 9000;
+constexpr Score secondKillerMoveScore = 8500;
+
 bool isPromotion(Move move);
 bool isCapture(Move move);
 bool isEnPassant(Move move);
@@ -55,5 +59,5 @@ void undoMove(Board *board);
 char *moveToString(Move move);
 Move  parseMove(const char *move, const Board *board);
 
-Score scoreMove(const Board *board, Move move);
-void  scoreAllMoves(const Board *board, MoveList *moveList);
+Score scoreMove(const Board *board, Move move, int ply, const SearchData *searchData);
+void  scoreAllMoves(const Board *board, MoveList *moveList, int ply, const SearchData *searchData);

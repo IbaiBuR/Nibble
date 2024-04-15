@@ -15,7 +15,8 @@ static inline int compareMoves(const void *a, const void *b) {
     return 0;
 }
 
-inline void sortMoves(const Board *board, MoveList *moveList) {
-    scoreAllMoves(board, moveList);
+inline void
+sortMoves(const Board *board, MoveList *moveList, const int ply, const SearchData *searchData) {
+    scoreAllMoves(board, moveList, ply, searchData);
     qsort(moveList->moves, moveList->count, sizeof(ScoredMove), compareMoves);
 }

@@ -129,13 +129,31 @@ Move parseMove(const char *move, const Board *board) {
     return NOMOVE;
 }
 
-Score scoreMove(const Board *board, const Move move) {
-    return isCapture(move)
-             ? MVV_LVA[pieceOnSquare(board, from(move))][pieceOnSquare(board, to(move))]
-             : 0;
+Score scoreMove(const Board *board, const Move move, const int ply, const SearchData *searchData) {
+    const Piece  movingPiece  = pieceOnSquare(board, from(move));
+    const Square targetSquare = to(move);
+
+    if (isCapture(move))
+        return MVV_LVA[movingPiece][pieceOnSquare(board, targetSquare)] + MVV_LVA_ScoreBonus;
+    else
+    {
+        // Killer moves
+        if (searchData->killers[0][ply] == move)
+            return firstKillerMoveScore;
+        else if (searchData->killers[1][ply] == move)
+            return secondKillerMoveScore;
+        // History moves
+        else
+            return searchData->history[movingPiece][targetSquare];
+    }
+
+    return 0;
 }
 
-void scoreAllMoves(const Board *board, MoveList *moveList) {
+void scoreAllMoves(const Board      *board,
+                   MoveList         *moveList,
+                   const int         ply,
+                   const SearchData *searchData) {
     for (uint32_t i = 0; i < moveList->count; i++)
-        moveList->moves[i].score = scoreMove(board, moveList->moves[i].move);
+        moveList->moves[i].score = scoreMove(board, moveList->moves[i].move, ply, searchData);
 }

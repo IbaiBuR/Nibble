@@ -1,16 +1,22 @@
 #include "search.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #include "bitboard.h"
 #include "eval.h"
 #include "move.h"
 #include "movegen.h"
 #include "movesort.h"
+#include "piece.h"
 
 // Quiescence search, to get rid of the horizon effect
-static inline Score
-qsearch(Board *board, Score alpha, const Score beta, const int ply, SearchInfo *searchInfo) {
+static inline Score qsearch(Board      *board,
+                            Score       alpha,
+                            const Score beta,
+                            const int   ply,
+                            SearchInfo *searchInfo,
+                            SearchData *searchData) {
     const Score staticEval = evaluate(board);
 
     if (staticEval >= beta)
@@ -23,14 +29,14 @@ qsearch(Board *board, Score alpha, const Score beta, const int ply, SearchInfo *
     MoveList moveList;
     moveList.count = 0;
     generateAllCaptures(board, &moveList, board->stm);
-    sortMoves(board, &moveList);
+    sortMoves(board, &moveList, ply, searchData);
 
     for (uint32_t i = 0; i < moveList.count; i++)
     {
         if (!makeMove(moveList.moves[i].move, board))
             continue;
 
-        const Score score = -qsearch(board, -beta, -alpha, ply + 1, searchInfo);
+        const Score score = -qsearch(board, -beta, -alpha, ply + 1, searchInfo, searchData);
         undoMove(board);
 
         // fail-hard beta-cutoff
@@ -48,8 +54,13 @@ qsearch(Board *board, Score alpha, const Score beta, const int ply, SearchInfo *
     return alpha;
 }
 
-static inline Score negamax(
-    Board *board, Score alpha, const Score beta, int depth, const int ply, SearchInfo *searchInfo) {
+static inline Score negamax(Board      *board,
+                            Score       alpha,
+                            const Score beta,
+                            int         depth,
+                            const int   ply,
+                            SearchInfo *searchInfo,
+                            SearchData *searchData) {
     const bool  isRootMove      = ply == 0;
     const bool  inCheck         = bitCount(board->checkers) > 0;
     const Score oldAlpha        = alpha;
@@ -57,7 +68,7 @@ static inline Score negamax(
     uint16_t    legalMoveCount  = 0;
 
     if (depth == 0)
-        return qsearch(board, alpha, beta, ply, searchInfo);
+        return qsearch(board, alpha, beta, ply, searchInfo, searchData);
 
     searchInfo->nodes++;
 
@@ -67,29 +78,39 @@ static inline Score negamax(
 
     MoveList moveList;
     generateAllMoves(board, &moveList, board->stm);
-    sortMoves(board, &moveList);
+    sortMoves(board, &moveList, ply, searchData);
 
     for (uint32_t i = 0; i < moveList.count; i++)
     {
-        if (!makeMove(moveList.moves[i].move, board))
+        const Move currentMove = moveList.moves[i].move;
+
+        if (!makeMove(currentMove, board))
             continue;
 
         legalMoveCount++;
-        const Score score = -negamax(board, -beta, -alpha, depth - 1, ply + 1, searchInfo);
+        const Score score =
+            -negamax(board, -beta, -alpha, depth - 1, ply + 1, searchInfo, searchData);
         undoMove(board);
 
         // fail-hard beta-cutoff
         if (score >= beta)
+        {
+            // killer moves
+            searchData->killers[1][ply] = searchData->killers[0][ply];
+            searchData->killers[0][ply] = currentMove;
             // node fails high
             return beta;
+        }
 
         if (score > alpha)
         {
+            // history moves
+            searchData->history[pieceOnSquare(board, from(currentMove))][to(currentMove)] += depth;
             // PV node
             alpha = score;
 
             if (isRootMove)
-                currentBestMove = moveList.moves[i].move;
+                currentBestMove = currentMove;
         }
     }
 
@@ -110,11 +131,20 @@ static inline Score negamax(
     return alpha;
 }
 
+void initSearch(SearchInfo *info, SearchData *searchData) {
+    info->nodes    = 0;
+    info->bestMove = NOMOVE;
+    memset(searchData->killers, NOMOVE, sizeof(searchData->killers));
+    memset(searchData->history, 0, sizeof(searchData->history));
+}
+
 void search(Board *board, const int depth) {
     SearchInfo searchInfo;
-    searchInfo.nodes    = 0;
-    searchInfo.bestMove = NOMOVE;
-    const Score score   = negamax(board, -SCORE_INFINITE, SCORE_INFINITE, depth, 0, &searchInfo);
+    SearchData searchData;
+    initSearch(&searchInfo, &searchData);
+
+    const Score score =
+        negamax(board, -SCORE_INFINITE, SCORE_INFINITE, depth, 0, &searchInfo, &searchData);
 
     if (searchInfo.bestMove != NOMOVE)
     {

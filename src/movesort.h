@@ -19,4 +19,4 @@ constexpr Score MVV_LVA[PIECE_NB][PIECE_NB] = {
     {100, 200, 300, 400, 500, 600, 100, 200, 300, 400, 500, 600}
 };
 
-void sortMoves(const Board *board, MoveList *moveList);
+void sortMoves(const Board *board, MoveList *moveList, int ply, const SearchData *searchData);

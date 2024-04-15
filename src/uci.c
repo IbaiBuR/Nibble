@@ -60,7 +60,7 @@ void parseGo(const char *command, Board *board) {
         perftTest(atoi(current + 6), board);
         return;
     }
-    if ((current = strstr(command, "depth")))
+    else if ((current = strstr(command, "depth")))
         depth = atoi(current + 6);
     else
         depth = 4;

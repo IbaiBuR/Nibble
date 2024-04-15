@@ -141,3 +141,8 @@ typedef struct SearchInfo {
     Move     bestMove;
     uint64_t nodes;
 } SearchInfo;
+
+typedef struct SearchData {
+    Move killers[2][MAX_PLY];
+    int  history[PIECE_NB][SQUARE_NB];
+} SearchData;
