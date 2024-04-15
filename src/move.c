@@ -136,6 +136,6 @@ Score scoreMove(const Board *board, const Move move) {
 }
 
 void scoreAllMoves(const Board *board, MoveList *moveList) {
-    for (int i = 0; i < moveList->count; i++)
+    for (uint32_t i = 0; i < moveList->count; i++)
         moveList->moves[i].score = scoreMove(board, moveList->moves[i].move);
 }
