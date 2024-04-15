@@ -1,7 +1,7 @@
 CC = gcc
 SRCS = *.c
 HEADERS = *.h
-FLAGS = -O3 -std=c2x -march=native -Wall -Wextra
+FLAGS = -O3 -std=c2x -march=native -funroll-loops -Wall -Wextra
 EXE = nibble
 
 .PHONY: all format clean
