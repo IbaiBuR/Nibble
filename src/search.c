@@ -6,6 +6,7 @@
 #include "eval.h"
 #include "move.h"
 #include "movegen.h"
+#include "movesort.h"
 
 // Quiescence search, to get rid of the horizon effect
 static inline Score
@@ -22,6 +23,7 @@ qsearch(Board *board, Score alpha, const Score beta, const int ply, SearchInfo *
     MoveList moveList;
     moveList.count = 0;
     generateAllCaptures(board, &moveList, board->stm);
+    sortMoves(board, &moveList);
 
     for (uint32_t i = 0; i < moveList.count; i++)
     {
@@ -46,12 +48,8 @@ qsearch(Board *board, Score alpha, const Score beta, const int ply, SearchInfo *
     return alpha;
 }
 
-static inline Score negamax(Board      *board,
-                            Score       alpha,
-                            const Score beta,
-                            const int   depth,
-                            const int   ply,
-                            SearchInfo *searchInfo) {
+static inline Score negamax(
+    Board *board, Score alpha, const Score beta, int depth, const int ply, SearchInfo *searchInfo) {
     const bool  isRootMove      = ply == 0;
     const bool  inCheck         = bitCount(board->checkers) > 0;
     const Score oldAlpha        = alpha;
@@ -63,8 +61,13 @@ static inline Score negamax(Board      *board,
 
     searchInfo->nodes++;
 
+    // Check extensions (https://www.chessprogramming.org/Check_Extensions)
+    if (inCheck)
+        depth += 1;
+
     MoveList moveList;
     generateAllMoves(board, &moveList, board->stm);
+    sortMoves(board, &moveList);
 
     for (uint32_t i = 0; i < moveList.count; i++)
     {
