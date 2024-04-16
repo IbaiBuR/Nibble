@@ -95,17 +95,22 @@ static inline Score negamax(Board      *board,
         // fail-hard beta-cutoff
         if (score >= beta)
         {
-            // killer moves
-            searchData->killers[1][ply] = searchData->killers[0][ply];
-            searchData->killers[0][ply] = currentMove;
+            if (isQuiet(currentMove))
+            {
+                // killer moves
+                searchData->killers[1][ply] = searchData->killers[0][ply];
+                searchData->killers[0][ply] = currentMove;
+            }
             // node fails high
             return beta;
         }
 
         if (score > alpha)
         {
-            // history moves
-            searchData->history[pieceOnSquare(board, from(currentMove))][to(currentMove)] += depth;
+            if (isQuiet(currentMove))
+                // history moves
+                searchData->history[pieceOnSquare(board, from(currentMove))][to(currentMove)] +=
+                    depth;
             // PV node
             alpha = score;
 
