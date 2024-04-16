@@ -10,6 +10,16 @@
 #include "movesort.h"
 #include "piece.h"
 
+void copyPV(SearchData *searchData, const int ply) {
+    for (int i = ply + 1; i < searchData->pv.pvLength[ply + 1]; i++)
+        searchData->pv.moves[ply][i] = searchData->pv.moves[ply + 1][i];
+}
+
+void printPV(const SearchData *searchData) {
+    for (int i = 0; i < searchData->pv.pvLength[0]; i++)
+        printf("%s ", moveToString(searchData->pv.moves[0][i]));
+}
+
 // Quiescence search, to get rid of the horizon effect
 static inline Score qsearch(Board      *board,
                             Score       alpha,
@@ -61,11 +71,9 @@ static inline Score negamax(Board      *board,
                             const int   ply,
                             SearchInfo *searchInfo,
                             SearchData *searchData) {
-    const bool  isRootMove      = ply == 0;
-    const bool  inCheck         = bitCount(board->checkers) > 0;
-    const Score oldAlpha        = alpha;
-    Move        currentBestMove = NOMOVE;
-    uint16_t    legalMoveCount  = 0;
+    const bool inCheck           = bitCount(board->checkers) > 0;
+    uint16_t   legalMoveCount    = 0;
+    searchData->pv.pvLength[ply] = ply;
 
     if (depth == 0)
         return qsearch(board, alpha, beta, ply, searchInfo, searchData);
@@ -114,8 +122,10 @@ static inline Score negamax(Board      *board,
             // PV node
             alpha = score;
 
-            if (isRootMove)
-                currentBestMove = currentMove;
+            // add moves to the PV (principal variation)
+            searchData->pv.moves[ply][ply] = currentMove;
+            copyPV(searchData, ply);
+            searchData->pv.pvLength[ply] = searchData->pv.pvLength[ply + 1];
         }
     }
 
@@ -130,15 +140,12 @@ static inline Score negamax(Board      *board,
             return 0;
     }
 
-    if (oldAlpha != alpha)
-        searchInfo->bestMove = currentBestMove;
     // node fails low
     return alpha;
 }
 
 void initSearch(SearchInfo *info, SearchData *searchData) {
-    info->nodes    = 0;
-    info->bestMove = NOMOVE;
+    info->nodes = 0;
     memset(searchData->killers, NOMOVE, sizeof(searchData->killers));
     memset(searchData->history, 0, sizeof(searchData->history));
 }
@@ -151,9 +158,9 @@ void search(Board *board, const int depth) {
     const Score score =
         negamax(board, -SCORE_INFINITE, SCORE_INFINITE, depth, 0, &searchInfo, &searchData);
 
-    if (searchInfo.bestMove != NOMOVE)
-    {
-        printf("info score cp %d depth %d nodes %ld\n", score, depth, searchInfo.nodes);
-        printf("bestmove %s\n", moveToString(searchInfo.bestMove));
-    }
+    searchInfo.bestMove = searchData.pv.moves[0][0];
+
+    printf("info score cp %d depth %d nodes %" PRIu64 " pv ", score, depth, searchInfo.nodes);
+    printPV(&searchData);
+    printf("bestmove %s\n", moveToString(searchInfo.bestMove));
 }

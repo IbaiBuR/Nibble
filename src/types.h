@@ -137,12 +137,18 @@ typedef struct MoveList {
     ScoredMove moves[MAX_MOVES];
 } MoveList;
 
+typedef struct PVTable {
+    int  pvLength[MAX_PLY];
+    Move moves[MAX_PLY][MAX_PLY];
+} PVTable;
+
 typedef struct SearchInfo {
     Move     bestMove;
     uint64_t nodes;
 } SearchInfo;
 
 typedef struct SearchData {
-    Move killers[2][MAX_PLY];
-    int  history[PIECE_NB][SQUARE_NB];
+    Move    killers[2][MAX_PLY];
+    int     history[PIECE_NB][SQUARE_NB];
+    PVTable pv;
 } SearchData;
