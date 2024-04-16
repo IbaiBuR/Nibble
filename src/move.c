@@ -18,6 +18,7 @@ bool isCapture(const Move move) {
 bool isEnPassant(const Move move) { return flag(move) == ENPASSANT; }
 bool isDoublePush(const Move move) { return flag(move) == DOUBLEPUSH; }
 bool isCastling(const Move move) { return flag(move) == CASTLE; }
+bool isQuiet(const Move move) { return !isCapture(move) && !isPromotion(move); }
 
 inline int makeMove(const Move move, Board *board) {
     copyBoardState(board);

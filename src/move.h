@@ -52,6 +52,7 @@ bool isCapture(Move move);
 bool isEnPassant(Move move);
 bool isDoublePush(Move move);
 bool isCastling(Move move);
+bool isQuiet(Move move);
 
 int  makeMove(Move move, Board *board);
 void undoMove(Board *board);
