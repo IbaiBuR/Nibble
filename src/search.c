@@ -78,6 +78,10 @@ static inline Score negamax(Board      *board,
     if (depth == 0)
         return qsearch(board, alpha, beta, ply, searchInfo, searchData);
 
+    // Return static eval if we are too deep to avoid overflows
+    if (ply >= MAX_PLY)
+        return evaluate(board);
+
     searchInfo->nodes++;
 
     // Check extension (https://www.chessprogramming.org/Check_Extensions)
