@@ -49,9 +49,9 @@ static inline Score qsearch(Board      *board,
         const Score score = -qsearch(board, -beta, -alpha, ply + 1, searchInfo, searchData);
         undoMove(board);
 
-        // fail-hard beta-cutoff
+        // Fail-hard beta-cutoff
         if (score >= beta)
-            // node fails high
+            // Node fails high
             return beta;
 
         if (score > alpha)
@@ -80,7 +80,7 @@ static inline Score negamax(Board      *board,
 
     searchInfo->nodes++;
 
-    // Check extensions (https://www.chessprogramming.org/Check_Extensions)
+    // Check extension (https://www.chessprogramming.org/Check_Extensions)
     if (inCheck)
         depth += 1;
 
@@ -100,29 +100,29 @@ static inline Score negamax(Board      *board,
             -negamax(board, -beta, -alpha, depth - 1, ply + 1, searchInfo, searchData);
         undoMove(board);
 
-        // fail-hard beta-cutoff
+        // Fail-hard beta-cutoff
         if (score >= beta)
         {
             if (isQuiet(currentMove))
             {
-                // killer moves
+                // Killer moves
                 searchData->killers[1][ply] = searchData->killers[0][ply];
                 searchData->killers[0][ply] = currentMove;
             }
-            // node fails high
+            // Node fails high
             return beta;
         }
 
         if (score > alpha)
         {
             if (isQuiet(currentMove))
-                // history moves
+                // History moves
                 searchData->history[pieceOnSquare(board, from(currentMove))][to(currentMove)] +=
                     depth;
             // PV node
             alpha = score;
 
-            // add moves to the PV (principal variation)
+            // Add moves to the PV (principal variation)
             searchData->pv.moves[ply][ply] = currentMove;
             copyPV(searchData, ply);
             searchData->pv.pvLength[ply] = searchData->pv.pvLength[ply + 1];
@@ -140,7 +140,7 @@ static inline Score negamax(Board      *board,
             return 0;
     }
 
-    // node fails low
+    // Node fails low
     return alpha;
 }
 

@@ -39,7 +39,7 @@ Bitboard genKnightAttacks(const Square sq) {
 
     setBit(bb, sq);
 
-    // white's knight attacks
+    // White's knight attacks
     if ((bb >> 17) & NOT_H_FILE)
         attacks |= (bb >> 17);
     if ((bb >> 15) & NOT_A_FILE)
@@ -49,7 +49,7 @@ Bitboard genKnightAttacks(const Square sq) {
     if ((bb >> 6) & NOT_AB_FILE)
         attacks |= (bb >> 6);
 
-    // black's knight attacks
+    // Black's knight attacks
     if ((bb << 17) & NOT_A_FILE)
         attacks |= (bb << 17);
     if ((bb << 15) & NOT_H_FILE)
@@ -68,7 +68,7 @@ Bitboard genKingAttacks(const Square sq) {
 
     setBit(bb, sq);
 
-    // king can move 1 square in all directions
+    // King can move 1 square in all directions
     attacks |= shiftN(bb);
     attacks |= shiftNE(bb);
     attacks |= shiftE(bb);

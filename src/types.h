@@ -97,10 +97,10 @@ typedef enum Piece : int {
 } Piece;
 
 typedef enum CastlingMask : int {
-    WK = 1, // 0001 white can castle kingside
-    WQ = 2, // 0010 white can castle queenside
-    BK = 4, // 0100 black can castle kingside
-    BQ = 8, // 1000 black can castle queenside
+    WK = 1, // 0001 White can castle kingside
+    WQ = 2, // 0010 White can castle queenside
+    BK = 4, // 0100 Black can castle kingside
+    BQ = 8, // 1000 Black can castle queenside
 } CastlingMask;
 
 typedef struct BoardCopy {
@@ -115,16 +115,16 @@ typedef struct BoardCopy {
 } BoardCopy;
 
 typedef struct Board {
-    Bitboard     pieceBB[PIECE_NB];         // bitboards for each piece type
-    Bitboard     occupancies[COLOR_NB + 1]; // occupancies for white, black and both
-    Bitboard     checkers;                  // bitboard for pieces that give check
-    Color        stm;                       // side to move
-    Square       epSq;                      // en-passant square
-    CastlingMask castling;                  // castling mask
-    BoardCopy    history[MAX_PLY];          // board history, for move unmaking
-    int          histPly;                   // keep track of the board history
-    int          fmr;                       // halfmoves till fifty-move rule
-    int          fullMoveNumber;            // number of fullmoves
+    Bitboard     pieceBB[PIECE_NB];         // Bitboards for each piece type
+    Bitboard     occupancies[COLOR_NB + 1]; // Occupancies for white, black and both
+    Bitboard     checkers;                  // Bitboard for pieces that give check
+    Color        stm;                       // Side to move
+    Square       epSq;                      // En Passant square
+    CastlingMask castling;                  // Castling mask
+    BoardCopy    history[MAX_PLY];          // Board history, for move unmaking
+    int          histPly;                   // To keep track of the board history
+    int          fmr;                       // Halfmoves till fifty-move rule
+    int          fullMoveNumber;            // Number of fullmoves
 } Board;
 
 typedef struct ScoredMove {

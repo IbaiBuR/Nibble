@@ -138,12 +138,10 @@ Score scoreMove(const Board *board, const Move move, const int ply, const Search
         return MVV_LVA[movingPiece][pieceOnSquare(board, targetSquare)] + MVV_LVA_ScoreBonus;
     else
     {
-        // Killer moves
         if (searchData->killers[0][ply] == move)
             return firstKillerMoveScore;
         else if (searchData->killers[1][ply] == move)
             return secondKillerMoveScore;
-        // History moves
         else
             return searchData->history[movingPiece][targetSquare];
     }

@@ -84,7 +84,7 @@ void parseFen(const char *fen, Board *board) {
                 if (currentPiece == NO_PIECE)
                     file--;
 
-                file += (*fen - '0'); // skip empty squares
+                file += (*fen - '0'); // Skip empty squares
                 fen++;
             }
             if (*fen == '/')
@@ -201,8 +201,6 @@ void restoreBoardState(Board *board) {
     board->fullMoveNumber = board->history[board->histPly].fullMoveNumber;
 }
 
-// returns whether a square is attacked by a side
-// useful to validate if king is in check
 inline bool attackedBySide(const Board *board, const Square sq, const Color c) {
     const Bitboard occupancies = board->occupancies[COLOR_NB];
 
