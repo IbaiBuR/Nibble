@@ -9,6 +9,7 @@
 #include "movegen.h"
 #include "movesort.h"
 #include "piece.h"
+#include "util.h"
 
 void copyPV(SearchData *searchData, const int ply) {
     for (int i = ply + 1; i < searchData->pv.pvLength[ply + 1]; i++)
@@ -18,6 +19,7 @@ void copyPV(SearchData *searchData, const int ply) {
 void printPV(const SearchData *searchData) {
     for (int i = 0; i < searchData->pv.pvLength[0]; i++)
         printf("%s ", moveToString(searchData->pv.moves[0][i]));
+    printf("\n");
 }
 
 // Quiescence search, to get rid of the horizon effect
@@ -152,6 +154,8 @@ void initSearch(SearchInfo *info, SearchData *searchData) {
     info->nodes = 0;
     memset(searchData->killers, NOMOVE, sizeof(searchData->killers));
     memset(searchData->history, 0, sizeof(searchData->history));
+    memset(searchData->pv.moves, NOMOVE, sizeof(searchData->pv.moves));
+    memset(searchData->pv.pvLength, 0, sizeof(searchData->pv.pvLength));
 }
 
 void search(Board *board, const int depth) {
@@ -159,12 +163,16 @@ void search(Board *board, const int depth) {
     SearchData searchData;
     initSearch(&searchInfo, &searchData);
 
-    const Score score =
-        negamax(board, -SCORE_INFINITE, SCORE_INFINITE, depth, 0, &searchInfo, &searchData);
+    // Iterative deepening loop
+    for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
+    {
+        const Score score   = negamax(board, -SCORE_INFINITE, SCORE_INFINITE, currentDepth, 0,
+                                      &searchInfo, &searchData);
+        searchInfo.bestMove = searchData.pv.moves[0][0];
 
-    searchInfo.bestMove = searchData.pv.moves[0][0];
-
-    printf("info score cp %d depth %d nodes %" PRIu64 " pv ", score, depth, searchInfo.nodes);
-    printPV(&searchData);
+        printf("info score cp %d depth %d nodes %" PRIu64 " pv ", score, currentDepth,
+               searchInfo.nodes);
+        printPV(&searchData);
+    }
     printf("bestmove %s\n", moveToString(searchInfo.bestMove));
 }
